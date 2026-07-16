@@ -1,6 +1,7 @@
 import { defineConfig } from "tinacms";
 
 const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || "main";
+const basePath = process.env.TINA_PUBLIC_BASE_PATH || "";
 
 const pairFields = (labelOne, labelTwo) => [
   { type: "string", name: "rotulo", label: labelOne, required: true },
@@ -14,7 +15,7 @@ export default defineConfig({
   build: {
     publicFolder: ".",
     outputFolder: "admin",
-    basePath: "julia-marques-figueiroa",
+    basePath,
   },
   media: {
     tina: {

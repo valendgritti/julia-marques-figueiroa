@@ -1,0 +1,20 @@
+{
+  "name": "julia-marques-figueiroa",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22 <24"
+  },
+  "scripts": {
+    "build": "tinacms build && eleventy",
+    "build:site": "eleventy",
+    "start": "tinacms dev -c \"eleventy --serve --pathprefix=/\""
+  },
+  "dependencies": {
+    "tinacms": "^2.9.0"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.2",
+    "@tinacms/cli": "^1.12.0"
+  }
+}

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ site.seoDescription }}" />
+  <title>Julia Marques Figueirôa — Cinema & Audiovisual</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Italiana&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="logo" href="#inicio" aria-label="Voltar ao início">JF<span>®</span></a>
+
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="menu">
+      <span></span><span></span>
+      <span class="sr-only">Abrir menu</span>
+    </button>
+
+    <nav id="menu" class="menu" aria-label="Navegação principal">
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">{{ site.heroEyebrow }}</p>
+        <h1>{{ site.heroTitle | safe }}</h1>
+        <p class="hero-intro">{{ site.heroIntro }}</p>
+      </div>
+
+      <div class="hero-visual reveal" aria-label="Espaço reservado para imagem de destaque">
+        <div class="frame-number">FRAME 01 / 24</div>
+        <div class="light-leak"></div>
+        <p>Imagem de destaque<br /><small>em breve</small></p>
+      </div>
+
+      <a class="scroll-hint" href="#trabalhos">Ver trabalhos <span>↓</span></a>
+    </section>
+
+    <section id="trabalhos" class="works section">
+      <header class="section-heading reveal">
+        <p class="eyebrow"></p>
+        <h2>{{ site.worksTitle }}</h2>
+        <p>{{ site.worksIntro }}</p>
+      </header>
+
+      <div class="project-filters reveal" aria-label="Filtrar trabalhos por categoria">
+        <button class="filter-button active" type="button" data-filter="todos" aria-pressed="true">
+          Todos
+        </button>
+        <button class="filter-button" type="button" data-filter="producao" aria-pressed="false">
+          Produção
+        </button>
+        <button class="filter-button" type="button" data-filter="fotografia" aria-pressed="false">
+          Fotografia
+        </button>
+        <button class="filter-button" type="button" data-filter="edicao" aria-pressed="false">
+          Edição
+        </button>
+        <button class="filter-button" type="button" data-filter="diversos" aria-pressed="false">
+          Diversos
+        </button>
+      </div>
+
+      <div class="subcategory-filters" data-category="fotografia" aria-label="Filtrar trabalhos de fotografia" hidden>
+        <button class="subcategory-button active" type="button" data-subfilter="todos" aria-pressed="true">
+          Todos
+        </button>
+        <button class="subcategory-button" type="button" data-subfilter="direcao-foto" aria-pressed="false">
+          Direção de foto
+        </button>
+        <button class="subcategory-button" type="button" data-subfilter="foto-still" aria-pressed="false">
+          Foto still
+        </button>
+        <button class="subcategory-button" type="button" data-subfilter="fotografia-digital" aria-pressed="false">
+          Fotografia digital
+        </button>
+      </div>
+
+      <div class="subcategory-filters" data-category="diversos" aria-label="Filtrar trabalhos diversos" hidden>
+        <button class="subcategory-button active" type="button" data-subfilter="todos" aria-pressed="true">
+          Todos
+        </button>
+        <button class="subcategory-button" type="button" data-subfilter="direcao" aria-pressed="false">
+          Direção
+        </button>
+        <button class="subcategory-button" type="button" data-subfilter="direcao-som" aria-pressed="false">
+          Direção de som
+        </button>
+        <button class="subcategory-button" type="button" data-subfilter="roteiros" aria-pressed="false">
+          Roteiros
+        </button>
+      </div>
+
+      <p class="filter-result reveal" aria-live="polite">Exibindo todos os trabalhos</p>
+
+      <div class="project-list">
+        <article class="project reveal" data-category="producao">
+          <div class="project-image project-image--producao">
+            <span>01</span>
+            <img src="imagens/Canto_V/CANTO_V2.png" alt="Imagem Título do Projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Produção · 2024</p>
+            <div class="informacoes">
+              <h3>CANTO V</h3>
+              <p>DIREÇÃO DE PRODUÇÃO</br>Curta de formação do 3° semestre do curso de cinema da FAAP</p>
+            </div>
+            <a href="projetos/projeto-canto-v.html" aria-label="Conhecer o projeto Canto V">
+              Conhecer projeto ↗
+            </a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="producao">
+          <div class="project-image project-image--producao">
+            <span>01</span>
+            <img src="imagens/Atmosfera/Atmosfera1.png" alt="Imagem provisória do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Produção · 2024</p>
+            <h3>ATMOSFERA</h3>
+            <p>Assistente de Produção</p>
+            <a href="projetos/projeto-atmosfera.html" aria-label="Conhecer o projeto Atmosfera">
+              Conhecer projeto ↗
+            </a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="direcao-foto">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img src="imagens/Transbordando/Transbordando3.png" alt="Imagem do Curta" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia · 2024</p>
+            <h3>TRANSBORDANDO</h3>
+            <p>DIREÇÃO DE FOTO </br>Curta de formação do 4° semestre do curso de cinema da FAAP</p>
+            <a href="projetos/projeto-transbordando.html" aria-label="Conhecer o projeto Transbordando">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="direcao-foto">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img class="foco-meio" src="imagens/Dança/Poison.png" alt="Imagem Do Vídeo Gravado" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia · 2024</p>
+            <h3>POISON</h3>
+            <p>Gravação de vídeo de dança para rede social</p>
+            <a href="projetos/projeto-poison.html" aria-label="Conhecer o projeto Poison">Conhecer projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="direcao-foto">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img class="foco-topo" src="imagens/Dança/Giants.png" alt="Imagem Do Vídeo Gravado" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia · 2024</p>
+            <h3>GIANTS</h3>
+            <p>Gravação de vídeo de dança para rede social</p>
+            <a href="projetos/projeto-giants.html" aria-label="Conhecer o projeto Giants">Conhecer projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="foto-still">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img src="imagens/Canto_V_FotoStill/CantoVFrame1.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia · 2024</p>
+            <h3>CANTO V, Isadora Castro</h3>
+            <p>Registros de fotografia do backstage, durante a produção do curta-metragem</p>
+            <a href="projetos/projeto-canto-v-foto-still.html" aria-label="Conhecer o ensaio still de Canto V">Conhecer
+              projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="foto-still">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img src="imagens/Polvo_Livre/PolvoLivre9.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia · 2024</p>
+            <h3>POLVO LIVRE, Leonardo Valota</h3>
+            <p>Registros de fotografia do backstage, durante a produção do curta-metragem</p>
+            <a href="projetos/projeto-polvo-livre-foto-still.html"
+              aria-label="Conhecer o ensaio still de Polvo Livre">Conhecer projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="foto-still">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img src="imagens/OqueRestouMaquinaDoDr/OqueRestouDeLa2.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia · 2024</p>
+            <h3>O QUE RESTOU DE LÁ / A MÁQUINA DO DR. REINER</h3>
+            <p>Registros de fotografia do backstage, durante a produção dos curta-metragem</p>
+            <a href="projetos/projeto-o-que-restou-de-la-dr-reiner.html"
+              aria-label="Conhecer O Que Restou de Lá e A Máquina do Dr. Reiner">Conhecer projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="fotografia" data-subcategory="fotografia-digital">
+          <div class="project-image project-image--fotografia">
+            <span>01</span>
+            <img src="imagens/FotografiaDigital/Digital3.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Fotografia</p>
+            <h3>DIGITAL</h3>
+            <p>Fotografias diversas em fortmato digital.</p>
+            <a href="projetos/projeto-fotografia-digital.html"
+              aria-label="Conhecer o projeto Fotografia Digital">Conhecer projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="edicao">
+          <div class="project-image project-image--edicao">
+            <span>01</span>
+            <img src="imagens/Polvo_Livre/PolvoLivre3.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Edição · 2024</p>
+            <h3>POLVO LIVRE</h3>
+            <p>Edição de um curta-metragem intitulado "Polvo Livre".</p>
+            <a href="projetos/projeto-polvo-livre-edicao.html" aria-label="Conhecer a edição de Polvo Livre">Conhecer
+              projeto ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="edicao">
+          <div class="project-image project-image--edicao">
+            <span>01</span>
+            <img src="imagens/Maid/Maid2.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Edição · 2024</p>
+            <h3>EXERCÍCIO MAID</h3>
+            <p>Edição de um curta-metragem intitulado "Exercício Maid".</p>
+            <a href="projetos/projeto-exercicio-maid-edicao.html"
+              aria-label="Conhecer a edição de Exercício Maid">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="edicao">
+          <div class="project-image project-image--edicao">
+            <span>01</span>
+            <img src="imagens/Luciara/Luciara4.jpg" alt="Imagem do projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Edição · 2024</p>
+            <h3>AQUELA QUE BRILHA, LUCIARA</h3>
+            <p>Editora de vídeo no projeto "Aquela Que Brilha, Luciara".</p>
+            <a href="projetos/projeto-aquela-que-brilha-luciara.html"
+              aria-label="Conhecer o projeto Aquela Que Brilha, Luciara">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="diversos" data-subcategory="direcao">
+          <div class="project-image project-image--diversos">
+            <span>01</span>
+            <img src="imagens/Maid/Maid6.jpg" alt="Imagemdo projeto" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Diversos · 2024</p>
+            <h3>EXERCÍCIO MAID</h3>
+            <p>Direção no projeto "Exercício Maid".</p>
+            <a href="projetos/projeto-exercicio-maid-direcao.html"
+              aria-label="Conhecer a direção de Exercício Maid">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="diversos" data-subcategory="direcao-som">
+          <div class="project-image project-image--diversos">
+            <span>01</span>
+            <img src="imagens/Canto_V/CantoVTeaser2.jpg" alt="Imagem do teaser Canto V" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Diversos · 2024</p>
+            <h3>TEASER</h3>
+            <h3>CANTO V</h3>
+            <p>Edição de som no teaser do projeto "Canto V".</p>
+            <a href="projetos/projeto-teaser-canto-v-som.html"
+              aria-label="Conhecer a direção de som do teaser Canto V">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="diversos" data-subcategory="roteiros">
+          <div class="project-image project-image--diversos">
+            <span>01</span>
+            <img class="foco-topo" src="imagens/Roteiros/RoteiroUmaVelaParaVoce.jpg" alt="Imagem do roteiro Uma Vela Para Você" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Diversos · 2024</p>
+            <h3>UMA VELA PARA VOCÊ</h3>
+            <p>Roteiro para o projeto "Uma Vela Para Você".</p>
+            <a href="projetos/projeto-uma-vela-para-voce.html"
+              aria-label="Conhecer o roteiro Uma Vela Para Você">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="diversos" data-subcategory="roteiros">
+          <div class="project-image project-image--diversos">
+            <span>01</span>
+            <img class="foco-topo" src="imagens/Roteiros/RoteiroMaid.jpg" alt="Imagem do roteiro Maid" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Diversos · 2024</p>
+            <h3>MAID</h3>
+            <p>Roteiro para o projeto "Maid".</p>
+            <a href="projetos/projeto-maid-roteiro.html" aria-label="Conhecer o roteiro Maid">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+
+        <article class="project reveal" data-category="diversos" data-subcategory="roteiros">
+          <div class="project-image project-image--diversos">
+            <span>01</span>
+            <img class="foco-topo" src="imagens/Roteiros/RoteiroSpecTapasEBeijos.jpg" alt="Imagem do roteiro Spec - Tapas e Beijos" />
+          </div>
+          <div class="project-info">
+            <p class="project-meta">Diversos · 2024</p>
+            <h3>SPEC - TAPAS E BEIJOS</h3>
+            <p>Roteiro para o projeto "Spec - Tapas e Beijos".</p>
+            <a href="projetos/projeto-spec-tapas-e-beijos.html"
+              aria-label="Conhecer o roteiro Spec - Tapas e Beijos">Conhecer projeto
+              ↗</a>
+          </div>
+        </article>
+        {% for item in collections.projeto | sort(attribute="data.ordem") %}
+        <article class="project reveal" data-category="{{ item.data.categoria }}"{% if item.data.subcategoria %} data-subcategory="{{ item.data.subcategoria }}"{% endif %}>
+          <div class="project-image project-image--{{ item.data.categoria }}"><span>01</span><img src="{{ item.data.capa | url }}" alt="{{ item.data.capaAlt }}" /></div>
+          <div class="project-info"><p class="project-meta">{{ item.data.eyebrow }}</p><h3>{{ item.data.titulo }}</h3><p>{{ item.data.resumo }}</p><a href="{{ item.url | url }}" aria-label="Conhecer o projeto {{ item.data.titulo }}">Conhecer projeto ↗</a></div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section id="sobre" class="about section">
+      <p class="about-index reveal">02 — Sobre</p>
+      <div class="about-content reveal">
+        <h2>{{ site.aboutTitle | safe }}</h2>
+        <div class="about-text">
+          <p>{{ site.aboutText | safe }}</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="contact section reveal">
+      <p class="eyebrow">{{ site.contactEyebrow }}</p>
+      <h2>{{ site.contactTitle | safe }}</h2>
+      <div class="contact-list">
+        <a class="contact-link">
+          <span>E-mail</span>
+          <strong>{{ site.email }}</strong>
+        </a>
+        <a class="contact-link" href="{{ site.whatsappUrl }}" target="_blank" rel="noopener noreferrer">
+          <span>WhatsApp</span>
+          <strong>{{ site.whatsappLabel }}</strong>
+          <span aria-hidden="true">↗</span>
+        </a>
+        <a class="contact-link" href="{{ site.linkedinUrl }}" target="_blank"
+          rel="noopener noreferrer">
+          <span>LinkedIn</span>
+          <strong>{{ site.linkedinLabel }}</strong>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="current-year"></span> Julia Marques Figueirôa</p>
+    <p>Feito com intenção, imagem e movimento.</p>
+  </footer>
+</body>
+
+</html>

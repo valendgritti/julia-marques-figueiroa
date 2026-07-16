@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="{{ description or site.seoDescription }}" />
+  <title>{{ pageTitle or "Julia Marques Figueirôa — Cinema & Audiovisual" }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Italiana&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ '/styles.css' | url }}" />
+  <script src="{{ '/script.js' | url }}" defer></script>
+</head>
+<body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
+  <div class="grain" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="logo" href="{{ '/index.html' | url }}" aria-label="Voltar ao início">JF<span>®</span></a>
+    <button class="menu-button" type="button" aria-expanded="false" aria-controls="menu"><span></span><span></span><span class="sr-only">Abrir menu</span></button>
+    <nav id="menu" class="menu" aria-label="Navegação principal">
+      <a href="{{ '/index.html#trabalhos' | url }}">Trabalhos</a><a href="{{ '/index.html#sobre' | url }}">Sobre</a><a href="{{ '/index.html#contato' | url }}">Contato</a>
+    </nav>
+  </header>
+  <main>{{ content | safe }}</main>
+  <footer><p>© <span id="current-year"></span> Julia Marques Figueirôa</p><p>Feito com intenção, imagem e movimento.</p></footer>
+</body>
+</html>

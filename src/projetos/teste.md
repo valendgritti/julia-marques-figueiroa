@@ -1,6 +1,6 @@
 ---
 titulo: Teste
-ordem: 18
+ordem: 3
 modelo: narrativo
 categoria: producao
 eyebrow: '3'

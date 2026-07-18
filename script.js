@@ -243,6 +243,54 @@ function numberProjects() {
 
 numberProjects();
 
+function updateProjectIndexContrast(projectImage) {
+  const image = projectImage.querySelector("img");
+  if (!image?.complete || !image.naturalWidth || !image.naturalHeight) return;
+
+  try {
+    const containerWidth = projectImage.clientWidth;
+    const containerHeight = projectImage.clientHeight;
+    if (!containerWidth || !containerHeight) return;
+
+    const scale = Math.max(containerWidth / image.naturalWidth, containerHeight / image.naturalHeight);
+    const visibleWidth = containerWidth / scale;
+    const visibleHeight = containerHeight / scale;
+    const sourceX = Math.max(0, (image.naturalWidth - visibleWidth) / 2);
+    const sourceY = Math.max(0, (image.naturalHeight - visibleHeight) / 2);
+    const sampleWidth = Math.min(visibleWidth * 0.38, image.naturalWidth - sourceX);
+    const sampleHeight = Math.min(visibleHeight * 0.58, image.naturalHeight - sourceY);
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d", { willReadFrequently: true });
+    canvas.width = 24;
+    canvas.height = 24;
+    context.drawImage(image, sourceX, sourceY, sampleWidth, sampleHeight, 0, 0, 24, 24);
+
+    const pixels = context.getImageData(0, 0, 24, 24).data;
+    let luminanceTotal = 0;
+    let visiblePixels = 0;
+    for (let pixel = 0; pixel < pixels.length; pixel += 4) {
+      if (pixels[pixel + 3] < 128) continue;
+      const red = pixels[pixel] / 255;
+      const green = pixels[pixel + 1] / 255;
+      const blue = pixels[pixel + 2] / 255;
+      luminanceTotal += (0.2126 * red) + (0.7152 * green) + (0.0722 * blue);
+      visiblePixels += 1;
+    }
+
+    const averageLuminance = visiblePixels ? luminanceTotal / visiblePixels : 0;
+    projectImage.classList.toggle("index-on-light", averageLuminance > 0.62);
+  } catch {
+    projectImage.classList.remove("index-on-light");
+  }
+}
+
+document.querySelectorAll(".project-image").forEach((projectImage) => {
+  const image = projectImage.querySelector("img");
+  if (!image) return;
+  if (image.complete) updateProjectIndexContrast(projectImage);
+  else image.addEventListener("load", () => updateProjectIndexContrast(projectImage), { once: true });
+});
+
 function closeMenu() {
   menu.classList.remove("open");
   menuButton.setAttribute("aria-expanded", "false");

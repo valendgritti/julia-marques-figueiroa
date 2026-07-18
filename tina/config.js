@@ -134,21 +134,21 @@ export default defineConfig({
           { type: "string", name: "descricaoSeo", label: "Descrição para Google e compartilhamentos", description: "Resumo usado por buscadores e redes sociais. Não aparece no conteúdo da página.", ui: { component: "textarea" } },
           { type: "image", name: "capa", label: "Imagem principal do projeto", description: "Imagem exibida na página inicial e no topo da página do projeto.", required: true },
           { type: "string", name: "capaAlt", label: "Descrição da imagem principal", description: "Descreva brevemente o que aparece na imagem para pessoas que usam leitores de tela.", required: true },
-          { type: "object", name: "fatos", label: "Informações em destaque", description: "Adicione dados curtos como ano, duração, formato ou cliente.", list: true, fields: pairFields("Nome da informação (ex.: Ano)", "Conteúdo da informação (ex.: 2025)") },
+          { type: "object", name: "fatos", label: "Informações em destaque", description: "Adicione dados curtos como ano, duração, formato ou cliente.", list: true, ui: { itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo}: ${item.valor}` : item?.rotulo || "Nova informação" }) }, fields: pairFields("Nome da informação (ex.: Ano)", "Conteúdo da informação (ex.: 2025)") },
           { type: "rich-text", name: "body", label: "Descrição completa do projeto", description: "Conte a história, o processo e os resultados do projeto.", isBody: true },
           { type: "string", name: "linkExterno", label: "Endereço do link externo", description: "Cole a URL completa, começando com https://." },
           { type: "string", name: "linkTexto", label: "Texto do botão do link externo", description: "Exemplo: Assistir ao filme ou Ver projeto completo." },
           { type: "string", name: "logline", label: "Resumo da história do roteiro (logline)", description: "Descreva a ideia central da história em uma ou duas frases.", ui: { component: conditionalField(TextField, isScript) } },
-          { type: "object", name: "blocosRoteiro", label: "Seções do roteiro", description: "Adicione os trechos ou etapas que formarão a apresentação do roteiro.", list: true, ui: { component: conditionalField(GroupListField, isScript) }, fields: [
+          { type: "object", name: "blocosRoteiro", label: "Seções do roteiro", description: "Adicione os trechos ou etapas que formarão a apresentação do roteiro.", list: true, ui: { component: conditionalField(GroupListField, isScript), itemProps: (item) => ({ label: item?.titulo || "Nova seção do roteiro" }) }, fields: [
             { type: "string", name: "titulo", label: "Título da seção do roteiro", required: true },
             { type: "string", name: "texto", label: "Texto da seção do roteiro", required: true, ui: { component: "textarea" } },
           ] },
           { type: "string", name: "trecho", label: "Trecho de exemplo do roteiro", description: "Inclua um pequeno trecho que será destacado na página.", ui: { component: conditionalField(TextField, isScript) } },
-          { type: "object", name: "galeria", label: "Imagens da galeria do projeto", description: "Adicione e organize as imagens que aparecerão após a descrição do projeto.", list: true, ui: { component: conditionalField(GroupListField, hasGallery) }, fields: [
+          { type: "object", name: "galeria", label: "Imagens da galeria do projeto", description: "Adicione e organize as imagens que aparecerão após a descrição do projeto.", list: true, ui: { component: conditionalField(GroupListField, hasGallery), itemProps: (item) => ({ label: item?.alt || item?.arquivo?.split("/").pop() || "Nova imagem" }) }, fields: [
             { type: "image", name: "arquivo", label: "Arquivo da imagem", required: true },
             { type: "string", name: "alt", label: "Descrição desta imagem", description: "Explique brevemente o que aparece na imagem.", required: true },
           ] },
-          { type: "object", name: "creditos", label: "Equipe e créditos do projeto", description: "Adicione uma linha para cada profissional ou empresa participante.", list: true, ui: { component: conditionalField(GroupListField, hasCredits) }, fields: pairFields("Função no projeto (ex.: Direção)", "Nome da pessoa ou empresa responsável") },
+          { type: "object", name: "creditos", label: "Equipe e créditos do projeto", description: "Adicione uma linha para cada profissional ou empresa participante.", list: true, ui: { component: conditionalField(GroupListField, hasCredits), itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo} — ${item.valor}` : item?.rotulo || item?.valor || "Novo crédito" }) }, fields: pairFields("Função no projeto (ex.: Direção)", "Nome da pessoa ou empresa responsável") },
           { type: "string", name: "layout", label: "Template interno", ui: { component: "hidden" } },
           { type: "string", name: "variantClass", label: "Variação visual interna", ui: { component: "hidden" } },
           { type: "string", name: "permalink", label: "Endereço interno", ui: { component: "hidden" } },

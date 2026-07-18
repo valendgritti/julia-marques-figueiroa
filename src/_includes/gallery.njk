@@ -8,7 +8,7 @@
 {% if galeria %}<section class="photo-gallery-section section">
   <header class="photo-gallery-heading reveal"><h2>{% if modelo == "fotografia-digital" %}Série digital{% else %}Ensaios & frames{% endif %}</h2><p>Seleção de imagens do projeto.</p></header>
   {% if modelo == "fotografia-digital" %}<div class="digital-mosaic reveal">{% for imagem in galeria %}<figure class="digital-frame"><img src="{{ imagem.arquivo | url }}" alt="{{ imagem.alt }}" loading="lazy" /></figure>{% endfor %}</div>
-  {% else %}<div class="still-mosaic still-mosaic--flexible reveal">{% for imagem in galeria %}<figure class="still-frame{% if loop.first %} still-frame--featured{% endif %}"><img src="{{ imagem.arquivo | url }}" alt="{{ imagem.alt }}" loading="lazy" /></figure>{% endfor %}</div>{% endif %}
+  {% else %}<div class="still-mosaic still-mosaic--flexible reveal">{% for imagem in galeria %}<figure class="still-frame"><img src="{{ imagem.arquivo | url }}" alt="{{ imagem.alt }}" loading="lazy" /></figure>{% endfor %}</div>{% endif %}
 </section>{% endif %}
 {% if creditos %}<section class="detail-credits section reveal"><h2>Ficha técnica</h2><dl class="credits">{% for item in creditos %}<div><dt>{{ item.rotulo }}</dt><dd>{{ item.valor }}</dd></div>{% endfor %}</dl></section>{% endif %}
 <a class="next-project" href="{{ '/index.html#trabalhos' | url }}"><span>Navegação</span><strong>Ver todos os projetos →</strong></a>

@@ -15,6 +15,7 @@
 }
 
 html {
+  font-size: clamp(100%, 1vw, 137.5%);
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
 }
@@ -484,7 +485,14 @@ h2 em {
   line-height: 1;
   position: absolute;
   top: 0;
+  text-shadow: 0 1px 12px rgba(23, 21, 18, 0.2);
+  transition: color 180ms ease, text-shadow 180ms ease;
   z-index: 1;
+}
+
+.project-image.index-on-light span {
+  color: rgba(23, 21, 18, 0.72);
+  text-shadow: 0 1px 12px rgba(255, 255, 255, 0.28);
 }
 
 .project-image--producao {
@@ -1237,16 +1245,17 @@ body.lightbox-open {
   align-items: end;
   display: grid;
   gap: 2rem;
-  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr);
   margin-bottom: 5rem;
 }
 
 .photo-gallery-heading h2 {
   font-family: var(--serif);
-  font-size: clamp(3.5rem, 7vw, 7rem);
+  font-size: clamp(3.5rem, 5.5vw, 6.5rem);
   font-weight: 400;
   letter-spacing: -0.045em;
   line-height: 0.9;
+  white-space: nowrap;
 }
 
 .photo-gallery-heading > p:last-child {
@@ -1607,12 +1616,14 @@ body.lightbox-open {
 
 .vertical-about h2 {
   font-family: var(--serif);
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 400;
 }
 
 .vertical-about p {
   color: #716b62;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  line-height: 1.6;
 }
 
 .vertical-about-copy {
@@ -1779,6 +1790,7 @@ body.lightbox-open {
 
   .photo-gallery-heading h2 {
     margin: 1.5rem 0 2rem;
+    white-space: normal;
   }
 
   .photo-gallery-grid {

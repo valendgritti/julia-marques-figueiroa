@@ -3,6 +3,20 @@
   "heroEyebrow": "Cinema · Produção · Audiovisual",
   "heroTitle": "Julia\nFigueirôa",
   "heroIntro": "Entre um take e outro existe uma vida a ser vivida e uma história a ser contada",
+  "heroSlides": [
+    {
+      "imagem": "/imagens/FotografiaDigital/Digital3.jpg",
+      "descricao": "Silhueta em movimento diante de uma projeção em tons de azul"
+    },
+    {
+      "imagem": "/imagens/Canto_V/CANTO_V4.png",
+      "descricao": "Cena cinematográfica com uma personagem em uma banheira"
+    },
+    {
+      "imagem": "/imagens/Transbordando/Transbordando3.png",
+      "descricao": "Frame do projeto Transbordando"
+    }
+  ],
   "worksTitle": "Trabalhos",
   "worksIntro": "Projetos organizados pelas diferentes áreas de atuação da Julia.",
   "aboutTitle": "Uma cineasta interessada no que existe\nentre as cenas.",

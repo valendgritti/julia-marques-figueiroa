@@ -172,6 +172,30 @@ h2 em {
   min-height: 70vh;
   overflow: hidden;
   position: relative;
+  touch-action: pan-y;
+}
+
+.hero-slides,
+.hero-slide,
+.hero-slide img {
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.hero-slide {
+  margin: 0;
+  opacity: 0;
+  transition: opacity 650ms ease;
+}
+
+.hero-slide.active {
+  opacity: 1;
+}
+
+.hero-slide img {
+  object-fit: cover;
 }
 
 .hero-visual > p,
@@ -188,11 +212,49 @@ h2 em {
 }
 
 .frame-number {
-  font-size: 0.55rem;
-  left: 1rem;
-  letter-spacing: 0.18em;
+  bottom: 1.25rem;
+  font-size: 0.58rem;
+  left: 1.25rem;
+  letter-spacing: 0.16em;
+  margin: 0;
   position: absolute;
-  top: 1rem;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
+.hero-controls {
+  bottom: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  position: absolute;
+  right: 1rem;
+  z-index: 3;
+}
+
+.hero-controls button {
+  align-items: center;
+  background: rgba(23, 21, 18, 0.55);
+  border: 1px solid rgba(244, 239, 229, 0.55);
+  border-radius: 50%;
+  color: var(--paper);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 1rem;
+  height: 2.75rem;
+  justify-content: center;
+  transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  width: 2.75rem;
+}
+
+.hero-controls button:hover {
+  background: var(--red);
+  border-color: var(--red);
+  transform: translateY(-2px);
+}
+
+.hero-controls button:focus-visible {
+  outline: 2px solid var(--paper);
+  outline-offset: 3px;
 }
 
 .light-leak {
@@ -204,6 +266,7 @@ h2 em {
   top: -15%;
   transform: rotate(-20deg);
   width: 45%;
+  z-index: 1;
 }
 
 .scroll-hint {
@@ -244,7 +307,12 @@ h2 em {
 
 .section-heading > p:last-child {
   align-self: end;
-  max-width: 18rem;
+  border-left: 2px solid var(--red);
+  color: #514d46;
+  font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+  line-height: 1.5;
+  max-width: 22rem;
+  padding: 0.15rem 0 0.15rem 1.25rem;
 }
 
 .project-list {
@@ -445,15 +513,21 @@ h2 em {
 
 .project-info > p:not(.project-meta) {
   color: #716b62;
-  margin-bottom: 2.5rem;
+  margin-bottom: 3.25rem;
 }
 
 .project-info a {
   border-bottom: 1px solid currentColor;
+  display: inline-block;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   padding-bottom: 0.3rem;
   text-transform: uppercase;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.project-info a:hover {
+  transform: translateX(0.35rem);
 }
 
 .about {
@@ -479,7 +553,8 @@ h2 em {
 
 .about-text {
   align-self: end;
-  font-size: 1.05rem;
+  font-size: clamp(1.2rem, 1.55vw, 1.45rem);
+  line-height: 1.55;
 }
 
 .placeholder-note {
@@ -506,7 +581,30 @@ h2 em {
   gap: 2rem;
   grid-template-columns: 1fr 2fr auto;
   padding: 1.4rem 0;
+  position: relative;
   text-align: left;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.contact-link::after {
+  background: var(--red);
+  bottom: -1px;
+  content: "";
+  height: 2px;
+  left: 0;
+  position: absolute;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms ease;
+  width: 100%;
+}
+
+.contact-link:hover {
+  transform: translateX(0.35rem);
+}
+
+.contact-link:hover::after {
+  transform: scaleX(1);
 }
 
 .contact-list {
@@ -614,12 +712,17 @@ footer {
     min-height: 45vh;
   }
 
+  .hero-controls button {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
+
   .scroll-hint {
     display: none;
   }
 
   .section {
-    padding: 6rem 6vw;
+    padding: 5.5rem 6vw;
   }
 
   .section-heading,
@@ -631,13 +734,23 @@ footer {
     margin: 2rem 0 3rem;
   }
 
+  .section-heading > p:last-child {
+    max-width: 30rem;
+  }
+
   .project-list {
-    gap: 6rem;
+    gap: 4.5rem;
   }
 
   .project-filters {
     margin-right: -6vw;
+    -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.5rem), transparent 100%);
+    mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 2.5rem), transparent 100%);
     padding-right: 6vw;
+  }
+
+  .project-info > p:not(.project-meta) {
+    margin-bottom: 2.5rem;
   }
 
   .project,
@@ -691,6 +804,14 @@ footer {
   .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .project-info a,
+  .hero-slide,
+  .hero-controls button,
+  .contact-link,
+  .contact-link::after {
     transition: none;
   }
 }

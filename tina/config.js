@@ -87,6 +87,10 @@ export default defineConfig({
           { type: "string", name: "heroEyebrow", label: "Linha acima do título" },
           { type: "string", name: "heroTitle", label: "Título principal", description: "Use Enter para começar a segunda linha. A última linha recebe o destaque em itálico automaticamente.", ui: { component: "textarea" } },
           { type: "string", name: "heroIntro", label: "Texto de abertura", ui: { component: "textarea" } },
+          { type: "object", name: "heroSlides", label: "Imagens de destaque da página inicial", description: "Adicione de 1 a 10 imagens. A ordem desta lista será a ordem exibida no carrossel.", list: true, required: true, ui: { min: 1, max: 10, itemProps: (item) => ({ label: item?.descricao || "Imagem de destaque" }) }, fields: [
+            { type: "image", name: "imagem", label: "Arquivo da imagem", required: true },
+            { type: "string", name: "descricao", label: "Descrição da imagem", description: "Explique brevemente o que aparece na imagem para pessoas que usam leitores de tela.", required: true },
+          ] },
           { type: "string", name: "worksTitle", label: "Título dos trabalhos" },
           { type: "string", name: "worksIntro", label: "Introdução dos trabalhos", ui: { component: "textarea" } },
           { type: "string", name: "aboutTitle", label: "Título da seção Sobre", description: "Use Enter antes do trecho que deve aparecer em itálico.", ui: { component: "textarea" } },

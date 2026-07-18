@@ -8,6 +8,45 @@ const subcategoryButtons = document.querySelectorAll(".subcategory-button");
 const projectList = document.querySelector(".project-list");
 const projects = sortProjectElements([...document.querySelectorAll(".project")]);
 const filterResult = document.querySelector(".filter-result");
+const heroCarousel = document.querySelector("[data-hero-carousel]");
+
+if (heroCarousel) {
+  const heroSlides = [...heroCarousel.querySelectorAll(".hero-slide")];
+  const currentFrame = heroCarousel.querySelector("[data-frame-current]");
+  const previousButton = heroCarousel.querySelector("[data-hero-previous]");
+  const nextButton = heroCarousel.querySelector("[data-hero-next]");
+  let activeSlide = 0;
+  let pointerStartX = null;
+
+  const showHeroSlide = (index) => {
+    activeSlide = (index + heroSlides.length) % heroSlides.length;
+    heroSlides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === activeSlide;
+      slide.classList.toggle("active", isActive);
+      slide.setAttribute("aria-hidden", String(!isActive));
+    });
+    if (currentFrame) currentFrame.textContent = String(activeSlide + 1).padStart(2, "0");
+  };
+
+  previousButton?.addEventListener("click", () => showHeroSlide(activeSlide - 1));
+  nextButton?.addEventListener("click", () => showHeroSlide(activeSlide + 1));
+
+  heroCarousel.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") showHeroSlide(activeSlide - 1);
+    if (event.key === "ArrowRight") showHeroSlide(activeSlide + 1);
+  });
+
+  heroCarousel.addEventListener("pointerdown", (event) => {
+    pointerStartX = event.clientX;
+  });
+
+  heroCarousel.addEventListener("pointerup", (event) => {
+    if (pointerStartX === null) return;
+    const distance = event.clientX - pointerStartX;
+    if (Math.abs(distance) > 45) showHeroSlide(activeSlide + (distance < 0 ? 1 : -1));
+    pointerStartX = null;
+  });
+}
 
 function getProjectOrder(project, originalIndex) {
   const configuredOrder = Number(project.dataset.order);

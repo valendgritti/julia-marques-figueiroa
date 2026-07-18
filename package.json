@@ -11,10 +11,10 @@
     "start": "tinacms dev -c \"eleventy --serve --pathprefix=/\""
   },
   "dependencies": {
-    "tinacms": "^2.9.0"
+    "tinacms": "^3.11.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
-    "@tinacms/cli": "^1.12.0"
+    "@tinacms/cli": "^2.5.6"
   }
 }

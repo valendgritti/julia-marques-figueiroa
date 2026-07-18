@@ -1,5 +1,5 @@
 export default function (eleventyConfig) {
-  for (const path of ["styles.css", "script.js", "imagens", "admin", "projetos"]) {
+  for (const path of ["styles.css", "script.js", "imagens", "admin"]) {
     eleventyConfig.addPassthroughCopy(path);
   }
   eleventyConfig.addFilter("nl2br", (value = "") => String(value).replace(/\r?\n/g, "<br />"));

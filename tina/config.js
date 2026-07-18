@@ -150,6 +150,7 @@ export default defineConfig({
           ] },
           { type: "object", name: "creditos", label: "Equipe e créditos do projeto", description: "Adicione uma linha para cada profissional ou empresa participante.", list: true, ui: { component: conditionalField(GroupListField, hasCredits) }, fields: pairFields("Função no projeto (ex.: Direção)", "Nome da pessoa ou empresa responsável") },
           { type: "string", name: "layout", label: "Template interno", ui: { component: "hidden" } },
+          { type: "string", name: "variantClass", label: "Variação visual interna", ui: { component: "hidden" } },
           { type: "string", name: "permalink", label: "Endereço interno", ui: { component: "hidden" } },
           { type: "string", name: "tags", label: "Coleção interna", ui: { component: "hidden" } },
         ],

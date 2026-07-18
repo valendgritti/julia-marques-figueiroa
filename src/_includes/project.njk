@@ -5,7 +5,7 @@
   {% if capa %}<div class="detail-cover project-image--{{ categoria }} reveal"><img src="{{ capa | url }}" alt="{{ capaAlt }}" /></div>{% endif %}
   <dl class="project-facts reveal">{% for item in fatos %}<div><dt>{{ item.rotulo }}</dt><dd>{{ item.valor }}</dd></div>{% endfor %}</dl>
 </section>
-<section class="detail-content section reveal"><h2>Sobre o<br /><em>projeto</em></h2><div class="detail-copy">{{ content | safe }}{% if linkExterno %}<a href="{{ linkExterno }}">{{ linkTexto or 'Ver projeto ↗' }}</a>{% endif %}</div></section>
+<section class="detail-content section reveal"><h2>Sobre o<br /><em>projeto</em></h2><div class="detail-copy">{{ content | safe }}{% if linkExterno %}<a class="project-action" href="{{ linkExterno }}">{{ linkTexto or 'Ver projeto ↗' }}</a>{% endif %}</div></section>
 {% if galeria %}<section class="detail-gallery section"><h2 class="reveal">Frames & bastidores</h2><div class="gallery-grid reveal">{% for imagem in galeria %}<div class="gallery-placeholder"><img src="{{ imagem.arquivo | url }}" alt="{{ imagem.alt }}" loading="lazy" /></div>{% endfor %}</div></section>{% endif %}
 {% if creditos %}<section class="detail-credits section reveal"><h2>Ficha técnica</h2><dl class="credits">{% for item in creditos %}<div><dt>{{ item.rotulo }}</dt><dd>{{ item.valor }}</dd></div>{% endfor %}</dl></section>{% endif %}
 <a class="next-project" href="{{ '/index.html#trabalhos' | url }}"><span>Navegação</span><strong>Ver todos os projetos →</strong></a>

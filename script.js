@@ -48,6 +48,85 @@ if (heroCarousel) {
   });
 }
 
+const galleryImages = [...document.querySelectorAll(
+  ".gallery-placeholder img, .photo-frame img, .digital-frame img, .still-frame img"
+)];
+
+if (galleryImages.length) {
+  const lightbox = document.createElement("div");
+  lightbox.className = "image-lightbox";
+  lightbox.hidden = true;
+  lightbox.setAttribute("role", "dialog");
+  lightbox.setAttribute("aria-modal", "true");
+  lightbox.setAttribute("aria-label", "Visualização ampliada da imagem");
+  lightbox.innerHTML = `
+    <button class="image-lightbox-close" type="button" aria-label="Fechar imagem">×</button>
+    <button class="image-lightbox-previous" type="button" aria-label="Imagem anterior">←</button>
+    <figure><img src="" alt="" /><figcaption><span data-lightbox-caption></span><span data-lightbox-count></span></figcaption></figure>
+    <button class="image-lightbox-next" type="button" aria-label="Próxima imagem">→</button>
+  `;
+  document.body.append(lightbox);
+
+  const expandedImage = lightbox.querySelector("figure img");
+  const caption = lightbox.querySelector("[data-lightbox-caption]");
+  const count = lightbox.querySelector("[data-lightbox-count]");
+  const closeButton = lightbox.querySelector(".image-lightbox-close");
+  const previousButton = lightbox.querySelector(".image-lightbox-previous");
+  const nextButton = lightbox.querySelector(".image-lightbox-next");
+  let activeImage = 0;
+  let previouslyFocused = null;
+
+  const showExpandedImage = (index) => {
+    activeImage = (index + galleryImages.length) % galleryImages.length;
+    const sourceImage = galleryImages[activeImage];
+    expandedImage.src = sourceImage.currentSrc || sourceImage.src;
+    expandedImage.alt = sourceImage.alt;
+    caption.textContent = sourceImage.alt;
+    count.textContent = `${String(activeImage + 1).padStart(2, "0")} / ${String(galleryImages.length).padStart(2, "0")}`;
+  };
+
+  const openLightbox = (index) => {
+    previouslyFocused = document.activeElement;
+    showExpandedImage(index);
+    lightbox.hidden = false;
+    document.body.classList.add("lightbox-open");
+    closeButton.focus();
+  };
+
+  const closeLightbox = () => {
+    lightbox.hidden = true;
+    document.body.classList.remove("lightbox-open");
+    expandedImage.src = "";
+    previouslyFocused?.focus();
+  };
+
+  galleryImages.forEach((image, index) => {
+    image.tabIndex = 0;
+    image.setAttribute("role", "button");
+    image.setAttribute("aria-label", `Ampliar: ${image.alt || "imagem da galeria"}`);
+    image.addEventListener("click", () => openLightbox(index));
+    image.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openLightbox(index);
+      }
+    });
+  });
+
+  closeButton.addEventListener("click", closeLightbox);
+  previousButton.addEventListener("click", () => showExpandedImage(activeImage - 1));
+  nextButton.addEventListener("click", () => showExpandedImage(activeImage + 1));
+  lightbox.addEventListener("click", (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (lightbox.hidden) return;
+    if (event.key === "Escape") closeLightbox();
+    if (event.key === "ArrowLeft") showExpandedImage(activeImage - 1);
+    if (event.key === "ArrowRight") showExpandedImage(activeImage + 1);
+  });
+}
+
 function getProjectOrder(project, originalIndex) {
   const configuredOrder = Number(project.dataset.order);
 

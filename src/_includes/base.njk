@@ -20,7 +20,7 @@
       <a href="{{ '/index.html#trabalhos' | url }}">Trabalhos</a><a href="{{ '/index.html#sobre' | url }}">Sobre</a><a href="{{ '/index.html#contato' | url }}">Contato</a>
     </nav>
   </header>
-  <main>{{ content | safe }}</main>
+  <main>{% block content %}{{ content | safe }}{% endblock %}</main>
   <footer><p>© <span id="current-year"></span> Julia Marques Figueirôa</p><p>Feito com intenção, imagem e movimento.</p></footer>
 </body>
 </html>

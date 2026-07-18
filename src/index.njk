@@ -36,7 +36,7 @@
     <section id="inicio" class="hero">
       <div class="hero-copy reveal">
         <p class="eyebrow">{{ site.heroEyebrow }}</p>
-        <h1>{{ site.heroTitle | safe }}</h1>
+        <h1>{{ site.heroTitle | stylizedTitle | safe }}</h1>
         <p class="hero-intro">{{ site.heroIntro }}</p>
       </div>
 
@@ -354,7 +354,7 @@
           </div>
         </article>
         {% for item in collections.projeto | sort(attribute="data.ordem") %}
-        <article class="project reveal" data-category="{{ item.data.categoria }}"{% if item.data.subcategoria %} data-subcategory="{{ item.data.subcategoria }}"{% endif %}>
+        <article class="project reveal" data-category="{{ item.data.categoria }}" data-order="{{ item.data.ordem }}"{% if item.data.subcategoria %} data-subcategory="{{ item.data.subcategoria }}"{% endif %}>
           <div class="project-image project-image--{{ item.data.categoria }}"><span>01</span><img src="{{ item.data.capa | url }}" alt="{{ item.data.capaAlt }}" /></div>
           <div class="project-info"><p class="project-meta">{{ item.data.eyebrow }}</p><h3>{{ item.data.titulo }}</h3><p>{{ item.data.resumo }}</p><a href="{{ item.url | url }}" aria-label="Conhecer o projeto {{ item.data.titulo }}">Conhecer projeto ↗</a></div>
         </article>
@@ -365,16 +365,16 @@
     <section id="sobre" class="about section">
       <p class="about-index reveal">02 — Sobre</p>
       <div class="about-content reveal">
-        <h2>{{ site.aboutTitle | safe }}</h2>
+        <h2>{{ site.aboutTitle | stylizedTitle | safe }}</h2>
         <div class="about-text">
-          <p>{{ site.aboutText | safe }}</p>
+          <p>{{ site.aboutText | nl2br | safe }}</p>
         </div>
       </div>
     </section>
 
     <section id="contato" class="contact section reveal">
       <p class="eyebrow">{{ site.contactEyebrow }}</p>
-      <h2>{{ site.contactTitle | safe }}</h2>
+      <h2>{{ site.contactTitle | stylizedTitle | safe }}</h2>
       <div class="contact-list">
         <a class="contact-link">
           <span>E-mail</span>

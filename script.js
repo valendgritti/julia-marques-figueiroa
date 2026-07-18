@@ -5,32 +5,55 @@ const year = document.querySelector("#current-year");
 const filterButtons = document.querySelectorAll(".filter-button");
 const subcategoryGroups = document.querySelectorAll(".subcategory-filters");
 const subcategoryButtons = document.querySelectorAll(".subcategory-button");
-const projects = document.querySelectorAll(".project");
+const projectList = document.querySelector(".project-list");
+const projects = sortProjectElements([...document.querySelectorAll(".project")]);
 const filterResult = document.querySelector(".filter-result");
 
-function getFileName(path) {
-  return decodeURIComponent(path)
-    .replaceAll("\\", "/")
-    .split("/")
-    .pop()
-    .split("?")[0]
-    .split("#")[0];
+function getProjectOrder(project, originalIndex) {
+  const configuredOrder = Number(project.dataset.order);
+
+  return Number.isFinite(configuredOrder) && configuredOrder > 0
+    ? configuredOrder - 0.5
+    : originalIndex + 1;
 }
 
-function readProjectCatalog(documentSource) {
-  const registeredFiles = new Set();
+function sortProjectElements(elements) {
+  return elements
+    .map((project, originalIndex) => ({
+      project,
+      originalIndex,
+      order: getProjectOrder(project, originalIndex),
+    }))
+    .sort((first, second) => first.order - second.order || first.originalIndex - second.originalIndex)
+    .map(({ project }) => project);
+}
 
-  return [...documentSource.querySelectorAll(".project")]
+if (projectList) projects.forEach((project) => projectList.append(project));
+
+function getProjectKey(path, baseUrl = window.location.href) {
+  const url = new URL(path, baseUrl);
+  let normalizedPath = decodeURIComponent(url.pathname).replace(/\/index\.html$/, "/");
+
+  if (normalizedPath.length > 1) normalizedPath = normalizedPath.replace(/\/$/, "");
+
+  return normalizedPath.toLowerCase();
+}
+
+function readProjectCatalog(documentSource, indexUrl) {
+  const registeredProjects = new Set();
+
+  return sortProjectElements([...documentSource.querySelectorAll(".project")])
     .map((project) => {
       const title = project.querySelector(".project-info h3")?.textContent.trim();
       const link = project.querySelector(".project-info a[href]")?.getAttribute("href");
-      const file = link ? getFileName(link) : "";
+      const url = link ? new URL(link, indexUrl).href : "";
+      const key = url ? getProjectKey(url) : "";
 
-      return { title, file };
+      return { title, url, key };
     })
     .filter((project) => {
-      if (!project.title || !project.file || registeredFiles.has(project.file)) return false;
-      registeredFiles.add(project.file);
+      if (!project.title || !project.key || registeredProjects.has(project.key)) return false;
+      registeredProjects.add(project.key);
       return true;
     });
 }
@@ -53,16 +76,18 @@ async function setupProjectNavigation() {
 
   const nextLabel = nextLink.querySelector("span");
   const nextTitle = nextLink.querySelector("strong");
+  const homeUrl = document.querySelector(".logo")?.href || new URL("/", window.location.href).href;
+  const worksUrl = new URL("#trabalhos", homeUrl).href;
 
   try {
-    const response = await fetch("../index.html");
+    const response = await fetch(homeUrl);
     if (!response.ok) throw new Error("Não foi possível carregar a lista de projetos.");
 
     const indexContent = await response.text();
     const indexDocument = new DOMParser().parseFromString(indexContent, "text/html");
-    const catalog = readProjectCatalog(indexDocument);
-    const currentFile = getFileName(window.location.pathname);
-    const currentIndex = catalog.findIndex((project) => project.file === currentFile);
+    const catalog = readProjectCatalog(indexDocument, response.url);
+    const currentProjectKey = getProjectKey(window.location.href);
+    const currentIndex = catalog.findIndex((project) => project.key === currentProjectKey);
 
     if (currentIndex < 0 || catalog.length < 2) {
       throw new Error("Projeto atual não encontrado na página inicial.");
@@ -71,16 +96,16 @@ async function setupProjectNavigation() {
     const previousProject = catalog[(currentIndex - 1 + catalog.length) % catalog.length];
     const nextProject = catalog[(currentIndex + 1) % catalog.length];
 
-    previousLink.href = previousProject.file;
+    previousLink.href = previousProject.url;
     previousLink.setAttribute("aria-label", `Voltar para o projeto anterior: ${previousProject.title}`);
     previousTitle.textContent = previousProject.title;
 
-    nextLink.href = nextProject.file;
+    nextLink.href = nextProject.url;
     nextLink.setAttribute("aria-label", `Ir para o próximo projeto: ${nextProject.title}`);
     nextTitle.textContent = `${nextProject.title} →`;
   } catch (error) {
     previousLink.hidden = true;
-    nextLink.href = "../index.html#trabalhos";
+    nextLink.href = worksUrl;
     nextLabel.textContent = "Navegação";
     nextTitle.textContent = "Ver todos os projetos →";
   }

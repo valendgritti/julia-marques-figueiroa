@@ -17,8 +17,8 @@
 :root {
   --ink: #171512;
   --paper: #e9e3d7;
-  --red: #9e2b1f;
-  --red-on-dark: #da7566;
+  --red: #a71930;
+  --red-on-dark: #e34949;
   --text-secondary-light: #655f57;
   --muted: #aaa397;
   --line: rgba(233, 227, 215, 0.25);
@@ -140,7 +140,7 @@ picture {
 .menu a:hover,
 .project-info a:hover,
 .contact-link:hover {
-  color: #da7566;
+  color: var(--red-on-dark);
 }
 
 .menu-button {
@@ -211,7 +211,7 @@ h2 em {
 .hero-visual {
   align-items: center;
   background:
-    linear-gradient(145deg, transparent 45%, rgba(147, 39, 27, 0.6)),
+    linear-gradient(145deg, transparent 45%, rgba(167, 25, 48, 0.6)),
     radial-gradient(circle at 40% 40%, #89745e, #322a24 50%, #100f0e 80%);
   display: flex;
   justify-content: center;
@@ -304,7 +304,7 @@ h2 em {
 }
 
 .light-leak {
-  background: rgba(218, 94, 54, 0.28);
+  background: rgba(204, 24, 48, 0.28);
   filter: blur(55px);
   height: 70%;
   position: absolute;
@@ -1772,7 +1772,7 @@ body.lightbox-open {
 }
 
 .next-project:hover {
-  background: #7f2117;
+  background: #7f1424;
 }
 
 .next-project span {

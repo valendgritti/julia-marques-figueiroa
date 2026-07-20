@@ -1,0 +1,57 @@
+diff --git a/node_modules/tinacms/dist/index.js b/node_modules/tinacms/dist/index.js
+index 69093c7..91f7f00 100644
+--- a/node_modules/tinacms/dist/index.js
++++ b/node_modules/tinacms/dist/index.js
+@@ -6187,12 +6187,7 @@ const Group$1 = ({ tinaForm, form, field, input, meta, index }) => {
+       form.mutators.push(field.name, obj);
+     }
+     if (field.openFormOnCreate) {
+-      const state = tinaForm.finalForm.getState();
+       const newIndex = field.addItemBehavior === "prepend" ? 0 : items.length;
+-      if (state.invalid === true) {
+-        cms.alerts.error("Cannot navigate away from an invalid form.");
+-        return;
+-      }
+       cms.dispatch({
+         type: "forms:set-active-field-name",
+         value: {
+@@ -6300,13 +6295,6 @@ const Item$1 = ({
+         }),
+         onMouseOut: () => setHoveredField({ id: null, fieldName: null }),
+         onClick: () => {
+-          const state = tinaForm.finalForm.getState();
+-          if (state.invalid === true) {
+-            cms.alerts.error(
+-              "Cannot navigate away from an invalid form."
+-            );
+-            return;
+-          }
+           cms.dispatch({
+             type: "forms:set-active-field-name",
+             value: {
+@@ -6467,11 +6455,6 @@ const Group = wrapFieldWithNoHeader(
+       Header,
+       {
+         onClick: () => {
+-          const state = tinaForm.finalForm.getState();
+-          if (state.invalid === true) {
+-            cms.alerts.error("Cannot navigate away from an invalid form.");
+-            return;
+-          }
+           cms.dispatch({
+             type: "forms:set-active-field-name",
+             value: { formId: tinaForm.id, fieldName: field.name }
+@@ -6915,13 +6898,6 @@ const BlockListItem = ({
+     ItemClickTarget,
+     {
+       onClick: () => {
+-        const state = tinaForm.finalForm.getState();
+-        if (state.invalid === true) {
+-          cms.alerts.error(
+-            "Cannot navigate away from an invalid form."
+-          );
+-          return;
+-        }
+         cms.dispatch({
+           type: "forms:set-active-field-name",
+           value: {

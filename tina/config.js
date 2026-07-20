@@ -13,8 +13,8 @@ const draftCredit = { rotulo: "Função", valor: "Pessoa ou empresa" };
 const draftScriptSection = { titulo: "Nova seção", texto: "Escreva o conteúdo desta seção" };
 
 const pairFields = (labelOne, labelTwo) => [
-  { type: "string", name: "rotulo", label: labelOne, required: true },
-  { type: "string", name: "valor", label: labelTwo, required: true },
+  { type: "string", name: "rotulo", label: labelOne },
+  { type: "string", name: "valor", label: labelTwo },
 ];
 
 const fieldValue = (form, name) => form.getFieldState(name)?.value;
@@ -80,8 +80,8 @@ const commonProjectFields = ({ includeBody = true } = {}) => [
   { type: "string", name: "linkTexto", label: "Texto do botão externo" },
 ];
 const galleryField = () => ({ type: "object", name: "galeria", label: "Imagens da galeria", description: "Ao adicionar, selecione a imagem e substitua a descrição provisória.", list: true, defaultItem: draftGalleryImage, openFormOnCreate: true, ui: { min: 1, itemProps: (item) => ({ label: item?.alt || item?.arquivo?.split("/").pop() || "Nova imagem" }) }, fields: [
-  { type: "image", name: "arquivo", label: "Arquivo da imagem", required: true },
-  { type: "string", name: "alt", label: "Descrição acessível da imagem", required: true },
+  { type: "image", name: "arquivo", label: "Arquivo da imagem" },
+  { type: "string", name: "alt", label: "Descrição acessível da imagem" },
 ] });
 const creditsField = () => ({ type: "object", name: "creditos", label: "Equipe e créditos", description: "Ao adicionar, substitua a função e o responsável provisórios.", list: true, defaultItem: draftCredit, openFormOnCreate: true, ui: { itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo} — ${item.valor}` : item?.rotulo || item?.valor || "Novo crédito" }) }, fields: pairFields("Função no projeto", "Pessoa ou empresa responsável") });
 const variantField = () => ({ type: "string", name: "variantClass", label: "Variação visual interna", ui: { component: "hidden" } });
@@ -131,8 +131,8 @@ export default defineConfig({
           { type: "string", name: "heroTitle", label: "Título principal", required: true, description: "Use Enter para começar a segunda linha. A última linha recebe o destaque em itálico automaticamente.", ui: { component: "textarea" } },
           { type: "string", name: "heroIntro", label: "Texto de abertura", required: true, ui: { component: "textarea" } },
           { type: "object", name: "heroSlides", label: "Imagens de destaque da página inicial", description: "Adicione de 1 a 10 imagens. A ordem desta lista será a ordem exibida no carrossel.", list: true, required: true, defaultItem: { imagem: placeholderImage, descricao: draftGalleryImage.alt }, openFormOnCreate: true, ui: { min: 1, max: 10, itemProps: (item) => ({ label: item?.descricao || "Imagem de destaque" }) }, fields: [
-            { type: "image", name: "imagem", label: "Arquivo da imagem", required: true },
-            { type: "string", name: "descricao", label: "Descrição da imagem", description: "Explique brevemente o que aparece na imagem para pessoas que usam leitores de tela.", required: true },
+            { type: "image", name: "imagem", label: "Arquivo da imagem" },
+            { type: "string", name: "descricao", label: "Descrição da imagem", description: "Explique brevemente o que aparece na imagem para pessoas que usam leitores de tela." },
           ] },
           { type: "string", name: "worksTitle", label: "Título dos trabalhos", required: true },
           { type: "string", name: "worksIntro", label: "Introdução dos trabalhos", required: true, ui: { component: "textarea" } },
@@ -174,7 +174,7 @@ export default defineConfig({
             ...titleAndOrderFields(), ...fixedClassification({ subcategoria: true }), ...commonProjectFields({ includeBody: false }),
             { type: "string", name: "logline", label: "Logline", required: true, ui: { component: "textarea" } },
             { type: "object", name: "blocosRoteiro", label: "Seções do roteiro", list: true, required: true, defaultItem: draftScriptSection, openFormOnCreate: true, ui: { min: 1, itemProps: (item) => ({ label: item?.titulo || "Nova seção" }) }, fields: [
-              { type: "string", name: "titulo", label: "Título da seção", required: true }, { type: "string", name: "texto", label: "Texto", required: true, ui: { component: "textarea" } },
+              { type: "string", name: "titulo", label: "Título da seção" }, { type: "string", name: "texto", label: "Texto", ui: { component: "textarea" } },
             ] },
             { type: "string", name: "trecho", label: "Trecho de exemplo", ui: { component: "textarea" } }, creditsField(), variantField(),
           ] },

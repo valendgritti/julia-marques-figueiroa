@@ -6,6 +6,12 @@ const errors = [];
 
 const hasValue = (value) => value !== undefined && value !== null && value !== "";
 
+const validateListDefault = (fields, values, context) => {
+  for (const field of fields) {
+    if (!hasValue(values?.[field.name])) errors.push(`${context}.${field.name} não possui valor inicial`);
+  }
+};
+
 const validateRequiredFields = (fields, values, context) => {
   for (const field of fields) {
     const value = values?.[field.name];
@@ -18,10 +24,8 @@ const validateRequiredFields = (fields, values, context) => {
     if (field.type !== "object" || !field.fields) continue;
 
     if (field.list) {
-      if (field.fields.some((child) => child.required)) {
-        if (!field.defaultItem) errors.push(`${context}.${field.name} não possui defaultItem para os campos internos obrigatórios`);
-        else validateRequiredFields(field.fields, field.defaultItem, `${context}.${field.name}.defaultItem`);
-      }
+      if (!field.defaultItem) errors.push(`${context}.${field.name} não possui defaultItem`);
+      else validateListDefault(field.fields, field.defaultItem, `${context}.${field.name}.defaultItem`);
       if (Array.isArray(value)) value.forEach((item, index) => validateRequiredFields(field.fields, item, `${context}.${field.name}[${index}]`));
     } else if (hasValue(value)) {
       validateRequiredFields(field.fields, value, `${context}.${field.name}`);
@@ -31,9 +35,9 @@ const validateRequiredFields = (fields, values, context) => {
 
 for (const collection of lock.schema.collections) {
   for (const field of collection.fields || []) {
-    if (field.type === "object" && field.list && field.fields?.some((child) => child.required)) {
-      if (!field.defaultItem) errors.push(`${collection.name}.${field.name} não possui defaultItem para os campos internos obrigatórios`);
-      else validateRequiredFields(field.fields, field.defaultItem, `${collection.name}.${field.name}.defaultItem`);
+    if (field.type === "object" && field.list) {
+      if (!field.defaultItem) errors.push(`${collection.name}.${field.name} não possui defaultItem`);
+      else validateListDefault(field.fields, field.defaultItem, `${collection.name}.${field.name}.defaultItem`);
     }
   }
 
@@ -43,9 +47,9 @@ for (const collection of lock.schema.collections) {
     else validateRequiredFields(template.fields, defaults, `${collection.name}.${template.name}`);
 
     for (const field of template.fields) {
-      if (field.type === "object" && field.list && field.fields?.some((child) => child.required)) {
-        if (!field.defaultItem) errors.push(`${collection.name}.${template.name}.${field.name} não possui defaultItem para os campos internos obrigatórios`);
-        else validateRequiredFields(field.fields, field.defaultItem, `${collection.name}.${template.name}.${field.name}.defaultItem`);
+      if (field.type === "object" && field.list) {
+        if (!field.defaultItem) errors.push(`${collection.name}.${template.name}.${field.name} não possui defaultItem`);
+        else validateListDefault(field.fields, field.defaultItem, `${collection.name}.${template.name}.${field.name}.defaultItem`);
       }
     }
   }

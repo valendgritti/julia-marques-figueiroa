@@ -105,12 +105,12 @@
           <span>E-mail</span>
           <strong>{{ site.email }}</strong>
         </a>
-        <a class="contact-link" href="{{ site.whatsappUrl }}" target="_blank" rel="noopener noreferrer">
+        <a class="contact-link" href="{{ site.whatsappUrl | safeExternalUrl }}" target="_blank" rel="noopener noreferrer">
           <span>WhatsApp</span>
           <strong>{{ site.whatsappLabel }}</strong>
           <span aria-hidden="true">↗</span>
         </a>
-        <a class="contact-link" href="{{ site.linkedinUrl }}" target="_blank"
+        <a class="contact-link" href="{{ site.linkedinUrl | safeExternalUrl }}" target="_blank"
           rel="noopener noreferrer">
           <span>LinkedIn</span>
           <strong>{{ site.linkedinLabel }}</strong>

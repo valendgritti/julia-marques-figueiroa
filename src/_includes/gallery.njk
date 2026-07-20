@@ -4,7 +4,7 @@
   {% if capa %}<div class="detail-cover project-image--{{ categoria }} reveal">{% image capa, capaAlt, "100vw", "eager", "high" %}</div>{% endif %}
   <dl class="project-facts reveal">{% for item in fatos %}<div><dt>{{ item.rotulo }}</dt><dd>{{ item.valor }}</dd></div>{% endfor %}</dl>
 </section>
-<section class="detail-content section reveal"><h2>Sobre o<br /><em>trabalho</em></h2><div class="detail-copy">{{ content | safe }}{% if linkExterno %}<a class="project-action" href="{{ linkExterno | safeExternalUrl }}" target="_blank" rel="noopener noreferrer">{{ linkTexto or 'Ver projeto ↗' }}</a>{% endif %}</div></section>
+<section class="detail-content section reveal"><h2>Sobre o<br /><em>trabalho</em></h2><div class="detail-copy">{{ content | sanitizeContent | safe }}{% if linkExterno %}<a class="project-action" href="{{ linkExterno | safeExternalUrl }}" target="_blank" rel="noopener noreferrer">{{ linkTexto or 'Ver projeto ↗' }}</a>{% endif %}</div></section>
 {% if galeria %}<section class="photo-gallery-section section">
   <header class="photo-gallery-heading reveal"><h2>{% if modelo == "fotografia-digital" %}Série digital{% else %}Ensaios & frames{% endif %}</h2><p>Seleção de imagens do projeto.</p></header>
   {% if modelo == "fotografia-digital" %}<div class="digital-mosaic reveal">{% for imagem in galeria %}<figure class="digital-frame">{% image imagem.arquivo, imagem.alt, "(max-width: 760px) 100vw, 33vw" %}</figure>{% endfor %}</div>

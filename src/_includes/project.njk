@@ -5,7 +5,7 @@
   {% if capa %}<div class="detail-cover project-image--{{ categoria }} reveal">{% image capa, capaAlt, "100vw", "eager", "high" %}</div>{% endif %}
   <dl class="project-facts reveal">{% for item in fatos %}<div><dt>{{ item.rotulo }}</dt><dd>{{ item.valor }}</dd></div>{% endfor %}</dl>
 </section>
-<section class="detail-content section reveal"><h2>Sobre o<br /><em>projeto</em></h2><div class="detail-copy">{{ content | safe }}{% if linkExterno %}<a class="project-action" href="{{ linkExterno | safeExternalUrl }}" target="_blank" rel="noopener noreferrer">{{ linkTexto or 'Ver projeto ↗' }}</a>{% endif %}</div></section>
+<section class="detail-content section reveal"><h2>Sobre o<br /><em>projeto</em></h2><div class="detail-copy">{{ content | sanitizeContent | safe }}{% if linkExterno %}<a class="project-action" href="{{ linkExterno | safeExternalUrl }}" target="_blank" rel="noopener noreferrer">{{ linkTexto or 'Ver projeto ↗' }}</a>{% endif %}</div></section>
   {% if galeria %}<section class="detail-gallery section"><h2 class="reveal">Frames & bastidores</h2><div class="gallery-grid reveal">{% for imagem in galeria %}<div class="gallery-placeholder">{% image imagem.arquivo, imagem.alt, "(max-width: 760px) 100vw, 50vw" %}</div>{% endfor %}</div></section>{% endif %}
 {% if creditos %}<section class="detail-credits section reveal"><h2>Ficha técnica</h2><dl class="credits">{% for item in creditos %}<div><dt>{{ item.rotulo }}</dt><dd>{{ item.valor }}</dd></div>{% endfor %}</dl></section>{% endif %}
 {% include "project-navigation.njk" %}

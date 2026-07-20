@@ -48,6 +48,11 @@ CSS e JavaScript são minificados pelo esbuild e recebem hash no nome. O arquivo
 Pages e Netlify. O GitHub Pages ignora esse arquivo; nele, a CSP continua ativa pela
 meta tag, mas headers HTTP e cache customizado exigem uma camada CDN ou migração.
 
+O `postinstall` aplica `patches/@tinacms+cli+2.5.6.patch`, um ajuste mínimo que torna
+o Tina CLI compatível com as versões corrigidas de Vite e esbuild fixadas em
+`package.json`. Remova o patch quando uma versão oficial do Tina CLI incorporar a
+correção e mantenha `npm audit` e o build do painel como critérios para a atualização.
+
 O workflow em `.github/workflows/pages.yml` executa validações, build do TinaCMS e
 publicação do diretório `_site` no GitHub Pages. Consulte `CMS_SETUP.md` para configurar
 as credenciais e o acesso editorial.

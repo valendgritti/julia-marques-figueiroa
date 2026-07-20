@@ -2,8 +2,18 @@ import Image from "@11ty/eleventy-img";
 import path from "node:path";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import sanitizeHtml from "sanitize-html";
 
 const pathPrefix = process.env.SITE_PATH_PREFIX || "/";
+
+const escapeHtml = (value = "") => String(value)
+  .replaceAll("&", "&amp;")
+  .replaceAll("<", "&lt;")
+  .replaceAll(">", "&gt;")
+  .replaceAll('"', "&quot;")
+  .replaceAll("'", "&#039;");
+
+const safeJsonStringify = (value) => JSON.stringify(value).replaceAll("<", "\\u003c");
 
 const normalizeLocalImage = (source) => path.join(process.cwd(), String(source).replace(/^\//, ""));
 
@@ -48,7 +58,7 @@ export default function (eleventyConfig) {
     if (currentIndex < 0 || sortedProjects.length < 2) return null;
     return sortedProjects[(currentIndex + offset + sortedProjects.length) % sortedProjects.length];
   });
-  eleventyConfig.addFilter("projectSchema", (title, description, url) => JSON.stringify({
+  eleventyConfig.addFilter("projectSchema", (title, description, url) => safeJsonStringify({
     "@context": "https://schema.org",
     "@type": "CreativeWork",
     name: title,
@@ -57,16 +67,22 @@ export default function (eleventyConfig) {
     url: `${process.env.SITE_URL || "https://valendgritti.github.io"}${url}`,
     creator: { "@type": "Person", name: "Julia Marques Figueirôa" },
   }));
-  eleventyConfig.addFilter("jsonStringify", (value) => JSON.stringify(value));
+  eleventyConfig.addFilter("jsonStringify", safeJsonStringify);
   eleventyConfig.addFilter("cspHash", (value) => createHash("sha256").update(String(value)).digest("base64"));
-  eleventyConfig.addFilter("nl2br", (value = "") => String(value).replace(/\r?\n/g, "<br />"));
+  eleventyConfig.addFilter("nl2br", (value = "") => escapeHtml(value).replace(/\r?\n/g, "<br />"));
+  eleventyConfig.addFilter("sanitizeContent", (value = "") => sanitizeHtml(String(value), {
+    allowedTags: ["p", "br", "strong", "em", "b", "i", "ul", "ol", "li", "blockquote", "code", "pre", "a", "h2", "h3", "h4", "hr"],
+    allowedAttributes: { a: ["href", "title", "target", "rel"] },
+    allowedSchemes: ["https", "mailto"],
+    allowProtocolRelative: false,
+    transformTags: {
+      a: (tagName, attributes) => ({
+        tagName,
+        attribs: attributes.target === "_blank" ? { ...attributes, rel: "noopener noreferrer" } : attributes,
+      }),
+    },
+  }));
   eleventyConfig.addFilter("stylizedTitle", (value = "") => {
-    const escapeHtml = (text) => String(text)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
     const lines = String(value).split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
 
     if (lines.length < 2) return escapeHtml(lines[0] || "");

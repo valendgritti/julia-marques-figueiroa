@@ -9,10 +9,12 @@
     "build": "tinacms build && npm run build:assets && eleventy",
     "build:assets": "node scripts/build-assets.mjs",
     "build:site": "npm run build:assets && eleventy",
-    "check": "npm run check:content && npm run check:syntax && npm run check:security",
+    "check": "npm run check:content && npm run check:syntax && npm run check:render-security && npm run check:security",
     "check:content": "node scripts/validate-content.mjs",
-    "check:security": "npm audit --omit=dev --audit-level=high",
-    "check:syntax": "node --check scripts/build-assets.mjs && node --check src/js/main.js && node --check eleventy.config.js && node --check tina/config.js",
+    "check:security": "npm audit --audit-level=high",
+    "check:render-security": "node scripts/test-render-security.mjs",
+    "check:syntax": "node --check scripts/build-assets.mjs && node --check scripts/validate-content.mjs && node --check scripts/test-render-security.mjs && node --check src/js/main.js && node --check src/js/carousel.js && node --check src/js/lightbox.js && node --check src/js/menu.js && node --check src/js/projects.js && node --check src/js/reveal.js && node --check eleventy.config.js && node --check tina/config.js",
+    "postinstall": "patch-package",
     "start": "npm run build:assets && tinacms dev -c \"eleventy --serve --pathprefix=/\""
   },
   "dependencies": {
@@ -22,9 +24,18 @@
     "@11ty/eleventy": "^3.1.2",
     "@11ty/eleventy-img": "^6.0.4",
     "@tinacms/cli": "^2.5.6",
-    "esbuild": "^0.28.1"
+    "esbuild": "^0.28.1",
+    "gray-matter": "^4.0.3",
+    "patch-package": "^8.0.1",
+    "sanitize-html": "^2.17.0",
+    "zod": "^3.25.76"
   },
   "overrides": {
+    "@vitejs/plugin-react": "4.7.0",
+    "@tinacms/cli": {
+      "esbuild": "0.25.12",
+      "vite": "6.4.3"
+    },
     "linkify-it": "5.0.2",
     "lodash": "4.18.1",
     "markdown-it": "14.3.0"

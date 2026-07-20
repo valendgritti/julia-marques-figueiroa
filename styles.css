@@ -18,6 +18,8 @@
   --ink: #171512;
   --paper: #e9e3d7;
   --red: #9e2b1f;
+  --red-on-dark: #da7566;
+  --text-secondary-light: #655f57;
   --muted: #aaa397;
   --line: rgba(233, 227, 215, 0.25);
   --serif: "Italiana", Georgia, serif;
@@ -182,7 +184,7 @@ picture {
 }
 
 .informacoes p {
-  color: #716b62;
+  color: var(--text-secondary-light);
 }
 
 .hero h1 {
@@ -197,7 +199,7 @@ picture {
 
 h1 em,
 h2 em {
-  color: var(--red);
+  color: var(--red-on-dark);
   font-weight: 400;
 }
 
@@ -563,7 +565,7 @@ h2 em {
 }
 
 .project-info > p:not(.project-meta) {
-  color: #716b62;
+  color: var(--text-secondary-light);
   margin-bottom: 3.25rem;
 }
 
@@ -692,12 +694,17 @@ footer {
 }
 
 .reveal {
-  opacity: 0;
-  transform: translateY(28px);
+  opacity: 1;
+  transform: none;
   transition: opacity 700ms ease, transform 700ms ease;
 }
 
-.reveal.visible {
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+}
+
+.js .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
@@ -707,7 +714,7 @@ footer {
     position: fixed;
   }
 
-  .menu-button {
+  .js .menu-button {
     cursor: pointer;
     display: grid;
     gap: 6px;
@@ -732,6 +739,12 @@ footer {
   }
 
   .menu {
+    font-size: 0.58rem;
+    gap: 0.8rem;
+    letter-spacing: 0.08em;
+  }
+
+  .js .menu {
     align-items: center;
     background: var(--ink);
     display: none;
@@ -741,7 +754,7 @@ footer {
     position: fixed;
   }
 
-  .menu.open {
+  .js .menu.open {
     display: flex;
   }
 
@@ -852,7 +865,7 @@ footer {
     scroll-behavior: auto;
   }
 
-  .reveal {
+  .js .reveal {
     opacity: 1;
     transform: none;
     transition: none;
@@ -950,7 +963,7 @@ footer {
 }
 
 .project-awards__list span {
-  color: #716b62;
+  color: var(--text-secondary-light);
   display: block;
   font-size: 0.6rem;
   letter-spacing: 0.14em;
@@ -1009,7 +1022,7 @@ footer {
 
 .project-facts dt,
 .credits dt {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-size: 0.6rem;
   letter-spacing: 0.14em;
   margin-bottom: 0.5rem;
@@ -1067,8 +1080,15 @@ footer {
 .vertical-about > a:hover,
 .vertical-about-copy > a:hover,
 .script-facts a:hover {
-  color: var(--red);
+  color: var(--red-on-dark);
   transform: translateX(0.35rem);
+}
+
+.script-intro > .project-action:hover,
+.script-facts a:hover,
+.vertical-about > a:hover,
+.vertical-about-copy > a:hover {
+  color: var(--red);
 }
 
 .detail-gallery {
@@ -1302,7 +1322,7 @@ body.lightbox-open {
 }
 
 .photo-gallery-heading > p:last-child {
-  color: #716b62;
+  color: var(--text-secondary-light);
   max-width: 20rem;
 }
 
@@ -1389,7 +1409,7 @@ body.lightbox-open {
 }
 
 .still-photo-group h3 span {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-family: var(--sans);
   font-size: 0.6rem;
   font-weight: 300;
@@ -1501,7 +1521,7 @@ body.lightbox-open {
 }
 
 .script-facts dt {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-size: 0.6rem;
   letter-spacing: 0.14em;
   margin-bottom: 0.4rem;
@@ -1528,7 +1548,7 @@ body.lightbox-open {
 }
 
 .script-cover figcaption {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   margin-top: 1rem;
@@ -1635,7 +1655,7 @@ body.lightbox-open {
 }
 
 .vertical-facts dt {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-size: 0.6rem;
   letter-spacing: 0.14em;
   margin-bottom: 0.4rem;
@@ -1664,7 +1684,7 @@ body.lightbox-open {
 }
 
 .vertical-about p {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-size: clamp(1.05rem, 1.3vw, 1.2rem);
   line-height: 1.6;
 }
@@ -1693,7 +1713,7 @@ body.lightbox-open {
 }
 
 .vertical-media figcaption {
-  color: #716b62;
+  color: var(--text-secondary-light);
   font-size: 0.6rem;
   letter-spacing: 0.1em;
   margin-top: 1rem;

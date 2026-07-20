@@ -3,3 +3,4 @@ _site/
 admin/
 .env
 tina/__generated__/
+.generated/

@@ -1,0 +1,8 @@
+{% set previousProject = collections.projeto | adjacentProject(page.url, -1) %}
+{% set nextProject = collections.projeto | adjacentProject(page.url, 1) %}
+{% if previousProject and nextProject %}
+<nav class="project-navigation" aria-label="Navegação entre projetos">
+  <a class="previous-project" href="{{ previousProject.url | url }}" aria-label="Projeto anterior: {{ previousProject.data.titulo }}"><span>← Projeto anterior</span><strong>{{ previousProject.data.titulo }}</strong></a>
+  <a class="next-project" href="{{ nextProject.url | url }}" aria-label="Próximo projeto: {{ nextProject.data.titulo }}"><span>Próximo projeto</span><strong>{{ nextProject.data.titulo }} →</strong></a>
+</nav>
+{% endif %}

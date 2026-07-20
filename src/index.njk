@@ -1,39 +1,6 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="{{ site.seoDescription }}" />
-  <base href="{{ '/' | url }}" />
-  <title>Julia Marques Figueirôa — Cinema & Audiovisual</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Italiana&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
-  <script src="script.js" defer></script>
-</head>
-
-<body>
-  <div class="grain" aria-hidden="true"></div>
-
-  <header class="site-header">
-    <a class="logo" href="#inicio" aria-label="Voltar ao início">JF<span>®</span></a>
-
-    <button class="menu-button" type="button" aria-expanded="false" aria-controls="menu">
-      <span></span><span></span>
-      <span class="sr-only">Abrir menu</span>
-    </button>
-
-    <nav id="menu" class="menu" aria-label="Navegação principal">
-      <a href="#trabalhos">Trabalhos</a>
-      <a href="#sobre">Sobre</a>
-      <a href="#contato">Contato</a>
-    </nav>
-  </header>
-
-  <main>
+{% extends "base.njk" %}
+{% set pageTitle = "Julia Marques Figueirôa — Cinema & Audiovisual" %}
+{% block content %}
     <section id="inicio" class="hero">
       <div class="hero-copy reveal">
         <p class="eyebrow">{{ site.heroEyebrow }}</p>
@@ -43,7 +10,7 @@
 
       <div class="hero-visual reveal" data-hero-carousel aria-label="Imagens de destaque" tabindex="0">
         <div class="hero-slides">
-          {% for slide in site.heroSlides %}<figure class="hero-slide{% if loop.first %} active{% endif %}" aria-hidden="{% if loop.first %}false{% else %}true{% endif %}"><img src="{{ slide.imagem | url }}" alt="{{ slide.descricao }}" /></figure>{% endfor %}
+          {% for slide in site.heroSlides %}<figure class="hero-slide{% if loop.first %} active{% endif %}" aria-hidden="{% if loop.first %}false{% else %}true{% endif %}">{% image slide.imagem, slide.descricao, "(max-width: 760px) 100vw, 45vw", ("eager" if loop.first else "lazy"), ("high" if loop.first else "auto") %}</figure>{% endfor %}
         </div>
         <p class="frame-number" aria-live="polite">FRAME <span data-frame-current>01</span> / <span data-frame-total>{% if site.heroSlides | length < 10 %}0{% endif %}{{ site.heroSlides | length }}</span></p>
         {% if site.heroSlides | length > 1 %}<div class="hero-controls"><button type="button" data-hero-previous aria-label="Imagem anterior">←</button><button type="button" data-hero-next aria-label="Próxima imagem">→</button></div>{% endif %}
@@ -113,7 +80,7 @@
       <div class="project-list">
         {% for item in collections.projeto | sort(attribute="data.ordem") %}
         <article class="project reveal" data-category="{{ item.data.categoria }}" data-order="{{ item.data.ordem }}"{% if item.data.subcategoria %} data-subcategory="{{ item.data.subcategoria }}"{% endif %}>
-          <div class="project-image project-image--{{ item.data.categoria }}"><span>01</span><img src="{{ item.data.capa | url }}" alt="{{ item.data.capaAlt }}" /></div>
+          <div class="project-image project-image--{{ item.data.categoria }}"><span>01</span>{% image item.data.capa, item.data.capaAlt, "(max-width: 760px) 100vw, 50vw" %}</div>
           <div class="project-info"><p class="project-meta">{{ item.data.eyebrow }}</p><h3>{{ item.data.titulo }}</h3><p>{{ item.data.resumo }}</p><a href="{{ item.url | url }}" aria-label="Conhecer o projeto {{ item.data.titulo }}">Conhecer projeto ↗</a></div>
         </article>
         {% endfor %}
@@ -134,7 +101,7 @@
       <p class="eyebrow">{{ site.contactEyebrow }}</p>
       <h2>{{ site.contactTitle | stylizedTitle | safe }}</h2>
       <div class="contact-list">
-        <a class="contact-link">
+        <a class="contact-link" href="mailto:{{ site.email }}">
           <span>E-mail</span>
           <strong>{{ site.email }}</strong>
         </a>
@@ -151,12 +118,4 @@
         </a>
       </div>
     </section>
-  </main>
-
-  <footer>
-    <p>© <span id="current-year"></span> Julia Marques Figueirôa</p>
-    <p>Feito com intenção, imagem e movimento.</p>
-  </footer>
-</body>
-
-</html>
+{% endblock %}

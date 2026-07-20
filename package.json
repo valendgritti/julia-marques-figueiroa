@@ -6,15 +6,27 @@
     "node": ">=22 <24"
   },
   "scripts": {
-    "build": "tinacms build && eleventy",
-    "build:site": "eleventy",
-    "start": "tinacms dev -c \"eleventy --serve --pathprefix=/\""
+    "build": "tinacms build && npm run build:assets && eleventy",
+    "build:assets": "node scripts/build-assets.mjs",
+    "build:site": "npm run build:assets && eleventy",
+    "check": "npm run check:content && npm run check:syntax && npm run check:security",
+    "check:content": "node scripts/validate-content.mjs",
+    "check:security": "npm audit --omit=dev --audit-level=high",
+    "check:syntax": "node --check scripts/build-assets.mjs && node --check src/js/main.js && node --check eleventy.config.js && node --check tina/config.js",
+    "start": "npm run build:assets && tinacms dev -c \"eleventy --serve --pathprefix=/\""
   },
   "dependencies": {
     "tinacms": "^3.11.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",
-    "@tinacms/cli": "^2.5.6"
+    "@11ty/eleventy-img": "^6.0.4",
+    "@tinacms/cli": "^2.5.6",
+    "esbuild": "^0.28.1"
+  },
+  "overrides": {
+    "linkify-it": "5.0.2",
+    "lodash": "4.18.1",
+    "markdown-it": "14.3.0"
   }
 }

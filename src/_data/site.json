@@ -1,4 +1,14 @@
 {
+  "siteUrl": "https://valendgritti.github.io",
+  "socialImage": "/assets/social-share.jpg",
+  "structuredData": {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Julia Marques Figueirôa",
+    "url": "https://valendgritti.github.io/julia-marques-figueiroa/",
+    "jobTitle": "Realizadora audiovisual",
+    "sameAs": ["https://www.linkedin.com/in/julia-figueiroa-a9335827a/"]
+  },
   "seoDescription": "Portfólio de Julia Marques Figueirôa, estudante de Cinema na FAAP e realizadora audiovisual.",
   "heroEyebrow": "Cinema · Produção · Audiovisual",
   "heroTitle": "Julia\nFigueirôa",

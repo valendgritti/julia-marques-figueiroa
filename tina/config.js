@@ -1,4 +1,4 @@
-import { defineConfig, GroupListField, SelectField, TextField } from "tinacms";
+import { defineConfig, SelectField } from "tinacms";
 
 const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || "main";
 const basePath = process.env.TINA_PUBLIC_BASE_PATH || "";
@@ -9,9 +9,6 @@ const pairFields = (labelOne, labelTwo) => [
 ];
 
 const fieldValue = (form, name) => form.getFieldState(name)?.value;
-
-const conditionalField = (Component, isVisible) => (props) =>
-  isVisible(props.form) ? Component(props) : null;
 
 const categoryOptions = {
   fotografia: [
@@ -26,37 +23,58 @@ const categoryOptions = {
   ],
 };
 
-const layoutOptions = {
-  narrativo: { label: "Projeto narrativo", value: "narrativo" },
-  still: { label: "Galeria foto still", value: "galeria-still" },
-  digital: { label: "Fotografia digital", value: "fotografia-digital" },
-  vertical: { label: "Vídeo vertical", value: "video-vertical" },
-  roteiro: { label: "Roteiro", value: "roteiro" },
-};
-
 const SubcategoryField = (props) => {
   const options = categoryOptions[fieldValue(props.form, "categoria")];
   return options ? SelectField({ ...props, field: { ...props.field, options } }) : null;
 };
 
-const LayoutField = (props) => {
-  const category = fieldValue(props.form, "categoria");
-  const subcategory = fieldValue(props.form, "subcategoria");
-  let options = [layoutOptions.narrativo];
-
-  if (subcategory === "foto-still") options = [layoutOptions.still];
-  else if (subcategory === "fotografia-digital") options = [layoutOptions.digital];
-  else if (subcategory === "roteiros") options = [layoutOptions.roteiro];
-  else if (subcategory === "direcao-foto") options = [layoutOptions.narrativo, layoutOptions.vertical];
-  else if (category === "fotografia") options = [layoutOptions.narrativo, layoutOptions.still, layoutOptions.digital, layoutOptions.vertical];
-  else if (category === "diversos") options = [layoutOptions.narrativo, layoutOptions.roteiro];
-
-  return SelectField({ ...props, field: { ...props.field, options } });
+const requiredHttpsUrl = (value) => {
+  if (!value) return;
+  try {
+    if (new URL(value).protocol !== "https:") return "Use uma URL completa começando com https://";
+  } catch {
+    return "Informe uma URL HTTPS válida";
+  }
 };
+const validEmail = (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Informe um e-mail válido";
 
-const isScript = (form) => fieldValue(form, "modelo") === "roteiro";
-const hasGallery = (form) => ["narrativo", "galeria-still", "fotografia-digital"].includes(fieldValue(form, "modelo"));
-const hasCredits = (form) => ["narrativo", "fotografia-digital", "roteiro"].includes(fieldValue(form, "modelo"));
+const hiddenField = (name, label, required = true) => ({ type: "string", name, label, required, ui: { component: "hidden" } });
+const titleAndOrderFields = () => [
+  { type: "string", name: "titulo", label: "Título do projeto", isTitle: true, required: true },
+  { type: "number", name: "ordem", label: "Posição na página inicial", required: true, ui: { validate: (value) => Number.isInteger(value) && value > 0 || "Use um número inteiro maior que zero" } },
+];
+const commonProjectFields = () => [
+  { type: "string", name: "eyebrow", label: "Categoria exibida acima do título", required: true },
+  { type: "string", name: "resumo", label: "Resumo do projeto", required: true, ui: { component: "textarea" } },
+  { type: "string", name: "descricaoSeo", label: "Descrição para Google e compartilhamentos", required: true, ui: { component: "textarea", validate: (value) => value?.length >= 40 && value.length <= 180 || "Use entre 40 e 180 caracteres" } },
+  { type: "image", name: "capa", label: "Imagem principal do projeto", required: true },
+  { type: "string", name: "capaAlt", label: "Descrição acessível da imagem principal", required: true },
+  {
+    type: "object",
+    name: "fatos",
+    label: "Informações em destaque",
+    description: "Ao adicionar, substitua os textos iniciais pelo nome e pelo conteúdo da informação.",
+    list: true,
+    defaultItem: { rotulo: "Informação", valor: "A definir" },
+    ui: {
+      itemProps: (item) => ({
+        label: item?.rotulo && item?.valor ? `${item.rotulo}: ${item.valor}` : item?.rotulo || "Nova informação",
+      }),
+    },
+    fields: pairFields("Nome da informação", "Conteúdo da informação"),
+  },
+  { type: "rich-text", name: "body", label: "Descrição completa do projeto", isBody: true },
+  { type: "string", name: "linkExterno", label: "Endereço do link externo", ui: { validate: requiredHttpsUrl } },
+  { type: "string", name: "linkTexto", label: "Texto do botão externo" },
+];
+const galleryField = () => ({ type: "object", name: "galeria", label: "Imagens da galeria", list: true, ui: { itemProps: (item) => ({ label: item?.alt || item?.arquivo?.split("/").pop() || "Nova imagem" }) }, fields: [
+  { type: "image", name: "arquivo", label: "Arquivo da imagem", required: true },
+  { type: "string", name: "alt", label: "Descrição acessível da imagem", required: true },
+] });
+const creditsField = () => ({ type: "object", name: "creditos", label: "Equipe e créditos", list: true, ui: { itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo} — ${item.valor}` : item?.rotulo || item?.valor || "Novo crédito" }) }, fields: pairFields("Função no projeto", "Pessoa ou empresa responsável") });
+const variantField = () => ({ type: "string", name: "variantClass", label: "Variação visual interna", ui: { component: "hidden" } });
+const fixedClassification = (model) => [hiddenField("modelo", "Modelo"), hiddenField("categoria", "Categoria"), ...(model.subcategoria ? [hiddenField("subcategoria", "Subcategoria", false)] : [])];
+const defaultItem = (modelo, categoria, subcategoria) => ({ ordem: 99, modelo, categoria, ...(subcategoria ? { subcategoria } : {}) });
 
 export default defineConfig({
   branch,
@@ -83,7 +101,7 @@ export default defineConfig({
         match: { include: "site" },
         ui: { allowedActions: { create: false, delete: false } },
         fields: [
-          { type: "string", name: "seoDescription", label: "Descrição para buscadores", ui: { component: "textarea" } },
+          { type: "string", name: "seoDescription", label: "Descrição para buscadores", required: true, ui: { component: "textarea", validate: (value) => value?.length >= 50 && value.length <= 160 || "Use entre 50 e 160 caracteres" } },
           { type: "string", name: "heroEyebrow", label: "Linha acima do título" },
           { type: "string", name: "heroTitle", label: "Título principal", description: "Use Enter para começar a segunda linha. A última linha recebe o destaque em itálico automaticamente.", ui: { component: "textarea" } },
           { type: "string", name: "heroIntro", label: "Texto de abertura", ui: { component: "textarea" } },
@@ -97,11 +115,11 @@ export default defineConfig({
           { type: "string", name: "aboutText", label: "Texto da seção Sobre", description: "Use uma linha em branco para separar os parágrafos. Não é necessário escrever códigos HTML.", ui: { component: "textarea" } },
           { type: "string", name: "contactEyebrow", label: "Linha acima do contato" },
           { type: "string", name: "contactTitle", label: "Título do contato", description: "Use Enter antes do trecho que deve aparecer em itálico.", ui: { component: "textarea" } },
-          { type: "string", name: "email", label: "E-mail" },
+          { type: "string", name: "email", label: "E-mail", required: true, ui: { validate: validEmail } },
           { type: "string", name: "whatsappLabel", label: "WhatsApp exibido" },
-          { type: "string", name: "whatsappUrl", label: "Link do WhatsApp" },
+          { type: "string", name: "whatsappUrl", label: "Link do WhatsApp", required: true, ui: { validate: requiredHttpsUrl } },
           { type: "string", name: "linkedinLabel", label: "LinkedIn exibido" },
-          { type: "string", name: "linkedinUrl", label: "Link do LinkedIn" },
+          { type: "string", name: "linkedinUrl", label: "Link do LinkedIn", required: true, ui: { validate: requiredHttpsUrl } },
         ],
       },
       {
@@ -112,56 +130,30 @@ export default defineConfig({
         ui: {
           filename: { slugify: (values) => values?.titulo?.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "novo-projeto" },
         },
-        fields: [
-          { type: "string", name: "titulo", label: "Título do projeto", description: "Nome que aparecerá na página inicial e na página do projeto.", isTitle: true, required: true },
-          { type: "number", name: "ordem", label: "Posição na página inicial", description: "Use 1 para o primeiro projeto, 2 para o segundo e assim por diante.", required: true },
-          { type: "string", name: "categoria", label: "Categoria principal do projeto", description: "Escolha a área principal em que este projeto será exibido.", required: true, options: [
-            { label: "Produção", value: "producao" },
-            { label: "Fotografia", value: "fotografia" },
-            { label: "Edição", value: "edicao" },
-            { label: "Diversos", value: "diversos" },
+        templates: [
+          {
+            name: "narrativo", label: "Projeto narrativo", ui: { defaultItem: defaultItem("narrativo", "producao") }, fields: [
+              ...titleAndOrderFields(),
+              hiddenField("modelo", "Modelo"),
+              { type: "string", name: "categoria", label: "Categoria principal", required: true, options: [
+                { label: "Produção", value: "producao" }, { label: "Fotografia", value: "fotografia" }, { label: "Edição", value: "edicao" }, { label: "Diversos", value: "diversos" },
+              ] },
+              { type: "string", name: "subcategoria", label: "Tipo específico", ui: { component: SubcategoryField }, options: ["direcao-foto", "foto-still", "fotografia-digital", "direcao", "direcao-som", "roteiros"] },
+              ...commonProjectFields(), galleryField(), creditsField(), variantField(),
+            ],
+          },
+          { name: "galeria_still", label: "Galeria foto still", ui: { defaultItem: defaultItem("galeria-still", "fotografia", "foto-still") }, fields: [...titleAndOrderFields(), ...fixedClassification({ subcategoria: true }), ...commonProjectFields(), galleryField(), creditsField(), variantField()] },
+          { name: "fotografia_digital", label: "Fotografia digital", ui: { defaultItem: defaultItem("fotografia-digital", "fotografia", "fotografia-digital") }, fields: [...titleAndOrderFields(), ...fixedClassification({ subcategoria: true }), ...commonProjectFields(), galleryField(), creditsField(), variantField()] },
+          { name: "video_vertical", label: "Vídeo vertical", ui: { defaultItem: defaultItem("video-vertical", "fotografia", "direcao-foto") }, fields: [...titleAndOrderFields(), ...fixedClassification({ subcategoria: true }), ...commonProjectFields(), variantField()] },
+          { name: "roteiro", label: "Roteiro", ui: { defaultItem: defaultItem("roteiro", "diversos", "roteiros") }, fields: [
+            ...titleAndOrderFields(), ...fixedClassification({ subcategoria: true }), ...commonProjectFields(),
+            { type: "string", name: "logline", label: "Logline", required: true, ui: { component: "textarea" } },
+            { type: "object", name: "blocosRoteiro", label: "Seções do roteiro", list: true, ui: { itemProps: (item) => ({ label: item?.titulo || "Nova seção" }) }, fields: [
+              { type: "string", name: "titulo", label: "Título da seção", required: true }, { type: "string", name: "texto", label: "Texto", required: true, ui: { component: "textarea" } },
+            ] },
+            { type: "string", name: "trecho", label: "Trecho de exemplo", ui: { component: "textarea" } }, creditsField(), variantField(),
           ] },
-          { type: "string", name: "subcategoria", label: "Tipo específico do projeto", description: "As opções mudam de acordo com a categoria principal escolhida.", ui: { component: SubcategoryField }, options: ["direcao-foto", "foto-still", "fotografia-digital", "direcao", "direcao-som", "roteiros"] },
-          { type: "string", name: "modelo", label: "Formato da página do projeto", description: "Define quais blocos de conteúdo aparecerão na página. Escolha o formato que melhor representa o projeto.", required: true, ui: { component: LayoutField }, options: [
-            { label: "Projeto narrativo", value: "narrativo" },
-            { label: "Galeria foto still", value: "galeria-still" },
-            { label: "Fotografia digital", value: "fotografia-digital" },
-            { label: "Vídeo vertical", value: "video-vertical" },
-            { label: "Roteiro", value: "roteiro" },
-          ] },
-          { type: "string", name: "eyebrow", label: "Categoria exibida acima do título", description: "Texto curto mostrado acima do título na página do projeto, por exemplo: Produção audiovisual.", required: true },
-          { type: "string", name: "resumo", label: "Resumo do projeto", description: "Apresentação curta exibida em destaque na página do projeto.", required: true, ui: { component: "textarea" } },
-          { type: "string", name: "descricaoSeo", label: "Descrição para Google e compartilhamentos", description: "Resumo usado por buscadores e redes sociais. Não aparece no conteúdo da página.", ui: { component: "textarea" } },
-          { type: "image", name: "capa", label: "Imagem principal do projeto", description: "Imagem exibida na página inicial e no topo da página do projeto.", required: true },
-          { type: "string", name: "capaAlt", label: "Descrição da imagem principal", description: "Descreva brevemente o que aparece na imagem para pessoas que usam leitores de tela.", required: true },
-          { type: "object", name: "fatos", label: "Informações em destaque", description: "Adicione dados curtos como ano, duração, formato ou cliente.", list: true, ui: { itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo}: ${item.valor}` : item?.rotulo || "Nova informação" }) }, fields: pairFields("Nome da informação (ex.: Ano)", "Conteúdo da informação (ex.: 2025)") },
-          { type: "rich-text", name: "body", label: "Descrição completa do projeto", description: "Conte a história, o processo e os resultados do projeto.", isBody: true },
-          { type: "string", name: "linkExterno", label: "Endereço do link externo", description: "Cole a URL completa, começando com https://." },
-          { type: "string", name: "linkTexto", label: "Texto do botão do link externo", description: "Exemplo: Assistir ao filme ou Ver projeto completo." },
-          { type: "string", name: "logline", label: "Resumo da história do roteiro (logline)", description: "Descreva a ideia central da história em uma ou duas frases.", ui: { component: conditionalField(TextField, isScript) } },
-          { type: "object", name: "blocosRoteiro", label: "Seções do roteiro", description: "Adicione os trechos ou etapas que formarão a apresentação do roteiro.", list: true, ui: { component: conditionalField(GroupListField, isScript), itemProps: (item) => ({ label: item?.titulo || "Nova seção do roteiro" }) }, fields: [
-            { type: "string", name: "titulo", label: "Título da seção do roteiro", required: true },
-            { type: "string", name: "texto", label: "Texto da seção do roteiro", required: true, ui: { component: "textarea" } },
-          ] },
-          { type: "string", name: "trecho", label: "Trecho de exemplo do roteiro", description: "Inclua um pequeno trecho que será destacado na página.", ui: { component: conditionalField(TextField, isScript) } },
-          { type: "object", name: "galeria", label: "Imagens da galeria do projeto", description: "Adicione e organize as imagens que aparecerão após a descrição do projeto.", list: true, ui: { component: conditionalField(GroupListField, hasGallery), itemProps: (item) => ({ label: item?.alt || item?.arquivo?.split("/").pop() || "Nova imagem" }) }, fields: [
-            { type: "image", name: "arquivo", label: "Arquivo da imagem", required: true },
-            { type: "string", name: "alt", label: "Descrição desta imagem", description: "Explique brevemente o que aparece na imagem.", required: true },
-          ] },
-          { type: "object", name: "creditos", label: "Equipe e créditos do projeto", description: "Adicione uma linha para cada profissional ou empresa participante.", list: true, ui: { component: conditionalField(GroupListField, hasCredits), itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo} — ${item.valor}` : item?.rotulo || item?.valor || "Novo crédito" }) }, fields: pairFields("Função no projeto (ex.: Direção)", "Nome da pessoa ou empresa responsável") },
-          { type: "string", name: "layout", label: "Template interno", ui: { component: "hidden" } },
-          { type: "string", name: "variantClass", label: "Variação visual interna", ui: { component: "hidden" } },
-          { type: "string", name: "permalink", label: "Endereço interno", ui: { component: "hidden" } },
-          { type: "string", name: "tags", label: "Coleção interna", ui: { component: "hidden" } },
         ],
-        defaultItem: () => ({
-          ordem: 99,
-          modelo: "narrativo",
-          categoria: "producao",
-          layout: "project-page.njk",
-          permalink: "projetos/projeto-{{ page.fileSlug }}/index.html",
-          tags: "projeto",
-        }),
       },
     ],
   },

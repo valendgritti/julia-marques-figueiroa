@@ -1,3 +1,19 @@
+@font-face {
+  font-display: swap;
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 300 500;
+  src: url("../fonts/dm-sans-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-display: swap;
+  font-family: "Italiana";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../fonts/italiana-latin.woff2") format("woff2");
+}
+
 :root {
   --ink: #171512;
   --paper: #e9e3d7;
@@ -48,6 +64,33 @@ a {
   overflow: hidden;
   position: absolute;
   width: 1px;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+.project-navigation {
+  display: block;
+}
+
+.skip-link {
+  background: var(--paper);
+  color: var(--ink);
+  left: 1rem;
+  padding: 0.75rem 1rem;
+  position: fixed;
+  top: 1rem;
+  transform: translateY(-200%);
+  z-index: 100;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+picture {
+  display: contents;
 }
 
 .site-header {

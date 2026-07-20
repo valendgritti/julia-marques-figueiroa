@@ -24,12 +24,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm run check
       - run: npm run build
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
           NEXT_PUBLIC_TINA_BRANCH: main
           TINA_PUBLIC_BASE_PATH: julia-marques-figueiroa
+          SITE_PATH_PREFIX: /julia-marques-figueiroa/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
         with:

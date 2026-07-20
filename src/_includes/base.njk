@@ -1,17 +1,30 @@
+{% if titulo %}{% set jsonLd = titulo | projectSchema(description or resumo, page.url | url) %}
+{% else %}{% set jsonLd = site.structuredData | jsonStringify %}{% endif %}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; connect-src 'self'; font-src 'self'; form-action 'self'; img-src 'self' data: blob:; object-src 'none'; script-src 'self' 'sha256-{{ jsonLd | cspHash }}'; style-src 'self'" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="{{ description or site.seoDescription }}" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <title>{{ pageTitle or "Julia Marques Figueirôa — Cinema & Audiovisual" }}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=Italiana&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="{{ '/styles.css' | url }}" />
-  <script src="{{ '/script.js' | url }}" defer></script>
+  <link rel="canonical" href="{{ site.siteUrl }}{{ page.url | url }}" />
+  <meta property="og:type" content="{% if titulo %}article{% else %}website{% endif %}" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Julia Marques Figueirôa" />
+  <meta property="og:title" content="{{ pageTitle or 'Julia Marques Figueirôa — Cinema & Audiovisual' }}" />
+  <meta property="og:description" content="{{ description or site.seoDescription }}" />
+  <meta property="og:url" content="{{ site.siteUrl }}{{ page.url | url }}" />
+  <meta property="og:image" content="{{ site.siteUrl }}{{ site.socialImage | url }}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preload" href="{{ '/fonts/italiana-latin.woff2' | url }}" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="{{ '/fonts/dm-sans-latin.woff2' | url }}" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="{{ ('/assets/' + assets.styles) | url }}" />
+  <script src="{{ ('/assets/' + assets.script) | url }}" defer></script>
 </head>
 <body{% if bodyClass %} class="{{ bodyClass }}"{% endif %}>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
   <div class="grain" aria-hidden="true"></div>
   <header class="site-header">
     <a class="logo" href="{{ '/index.html' | url }}" aria-label="Voltar ao início">JF<span>®</span></a>
@@ -20,7 +33,8 @@
       <a href="{{ '/index.html#trabalhos' | url }}">Trabalhos</a><a href="{{ '/index.html#sobre' | url }}">Sobre</a><a href="{{ '/index.html#contato' | url }}">Contato</a>
     </nav>
   </header>
-  <main>{% block content %}{{ content | safe }}{% endblock %}</main>
+  <main id="conteudo">{% block content %}{{ content | safe }}{% endblock %}</main>
   <footer><p>© <span id="current-year"></span> Julia Marques Figueirôa</p><p>Feito com intenção, imagem e movimento.</p></footer>
+  <script type="application/ld+json">{{ jsonLd | safe }}</script>
 </body>
 </html>

@@ -6,7 +6,8 @@
     "node": ">=22 <24"
   },
   "scripts": {
-    "build": "tinacms build && npm run build:assets && eleventy",
+    "build": "npm run build:cms && npm run build:site",
+    "build:cms": "tinacms build",
     "build:assets": "node scripts/build-assets.mjs",
     "build:site": "npm run build:assets && eleventy",
     "check": "npm run check:content && npm run check:syntax && npm run check:tina-forms && npm run check:render-security && npm run check:security",

@@ -25,12 +25,32 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm run build
+      - name: Aguardar indexação do schema no TinaCloud
+        shell: bash
+        run: |
+          for attempt in 1 2 3 4 5; do
+            if npm run build:cms; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 5 ]; then
+              echo "O schema continuou incompatível após 5 tentativas."
+              exit 1
+            fi
+
+            delay=$((attempt * 20))
+            echo "TinaCloud ainda não indexou a branch ${NEXT_PUBLIC_TINA_BRANCH}. Nova tentativa em ${delay}s."
+            sleep "$delay"
+          done
         env:
           NEXT_PUBLIC_TINA_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_TINA_CLIENT_ID }}
           TINA_TOKEN: ${{ secrets.TINA_TOKEN }}
-          NEXT_PUBLIC_TINA_BRANCH: main
+          NEXT_PUBLIC_TINA_BRANCH: ${{ github.ref_name }}
           TINA_PUBLIC_BASE_PATH: julia-marques-figueiroa
+
+      - name: Gerar site estático
+        run: npm run build:site
+        env:
           SITE_PATH_PREFIX: /julia-marques-figueiroa/
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4

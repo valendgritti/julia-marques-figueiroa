@@ -1,19 +1,20 @@
 import { defineConfig, SelectField } from "tinacms";
-import {
-  draftCredit,
-  draftGalleryImage,
-  draftPair,
-  draftScriptSection,
-  placeholderImage,
-  validateEditedImage,
-  validateEditedText,
-} from "./field-validation.js";
 
 const branch = process.env.NEXT_PUBLIC_TINA_BRANCH || "main";
 const basePath = process.env.TINA_PUBLIC_BASE_PATH || "";
-const pairFields = (labelOne, labelTwo, { draftItem, labelError, valueError }) => [
-  { type: "string", name: "rotulo", label: labelOne, ui: { validate: validateEditedText(labelError, draftItem.rotulo) } },
-  { type: "string", name: "valor", label: labelTwo, ui: { validate: validateEditedText(valueError, draftItem.valor) } },
+const placeholderImage = "/imagens/uploads/placeholder-projeto.svg";
+
+const draftPair = { rotulo: "Nova informação", valor: "Preencha este campo" };
+const draftGalleryImage = {
+  arquivo: placeholderImage,
+  alt: "Imagem provisória que deve ser substituída antes da publicação",
+};
+const draftCredit = { rotulo: "Função", valor: "Pessoa ou empresa" };
+const draftScriptSection = { titulo: "Nova seção", texto: "Escreva o conteúdo desta seção" };
+
+const pairFields = (labelOne, labelTwo) => [
+  { type: "string", name: "rotulo", label: labelOne },
+  { type: "string", name: "valor", label: labelTwo },
 ];
 
 const fieldValue = (form, name) => form.getFieldState(name)?.value;
@@ -72,25 +73,17 @@ const commonProjectFields = ({ includeBody = true } = {}) => [
         label: item?.rotulo && item?.valor ? `${item.rotulo}: ${item.valor}` : item?.rotulo || "Nova informação",
       }),
     },
-    fields: pairFields("Nome da informação", "Conteúdo da informação", {
-      draftItem: draftPair,
-      labelError: "Informe o nome da informação",
-      valueError: "Informe o conteúdo da informação",
-    }),
+    fields: pairFields("Nome da informação", "Conteúdo da informação"),
   },
   ...(includeBody ? [{ type: "rich-text", name: "body", label: "Descrição completa do projeto", isBody: true }] : []),
   { type: "string", name: "linkExterno", label: "Endereço do link externo", ui: { validate: requiredHttpsUrl } },
   { type: "string", name: "linkTexto", label: "Texto do botão externo" },
 ];
 const galleryField = () => ({ type: "object", name: "galeria", label: "Imagens da galeria", description: "Ao adicionar, selecione a imagem e substitua a descrição provisória.", list: true, defaultItem: draftGalleryImage, openFormOnCreate: true, ui: { min: 1, itemProps: (item) => ({ label: item?.alt || item?.arquivo?.split("/").pop() || "Nova imagem" }) }, fields: [
-  { type: "image", name: "arquivo", label: "Arquivo da imagem", ui: { validate: validateEditedImage("Selecione uma imagem") } },
-  { type: "string", name: "alt", label: "Descrição acessível da imagem", ui: { validate: validateEditedText("Descreva a imagem com pelo menos 12 caracteres", draftGalleryImage.alt, 12) } },
+  { type: "image", name: "arquivo", label: "Arquivo da imagem" },
+  { type: "string", name: "alt", label: "Descrição acessível da imagem" },
 ] });
-const creditsField = () => ({ type: "object", name: "creditos", label: "Equipe e créditos", description: "Ao adicionar, substitua a função e o responsável provisórios.", list: true, defaultItem: draftCredit, openFormOnCreate: true, ui: { itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo} — ${item.valor}` : item?.rotulo || item?.valor || "Novo crédito" }) }, fields: pairFields("Função no projeto", "Pessoa ou empresa responsável", {
-  draftItem: draftCredit,
-  labelError: "Informe a função no projeto",
-  valueError: "Informe a pessoa ou empresa responsável",
-}) });
+const creditsField = () => ({ type: "object", name: "creditos", label: "Equipe e créditos", description: "Ao adicionar, substitua a função e o responsável provisórios.", list: true, defaultItem: draftCredit, openFormOnCreate: true, ui: { itemProps: (item) => ({ label: item?.rotulo && item?.valor ? `${item.rotulo} — ${item.valor}` : item?.rotulo || item?.valor || "Novo crédito" }) }, fields: pairFields("Função no projeto", "Pessoa ou empresa responsável") });
 const variantField = () => ({ type: "string", name: "variantClass", label: "Variação visual interna", ui: { component: "hidden" } });
 const fixedClassification = (model) => [hiddenField("modelo", "Modelo"), hiddenField("categoria", "Categoria"), ...(model.subcategoria ? [hiddenField("subcategoria", "Subcategoria", false)] : [])];
 const projectDefaultItem = (modelo, categoria, subcategoria, extra = {}) => ({
@@ -138,8 +131,8 @@ export default defineConfig({
           { type: "string", name: "heroTitle", label: "Título principal", required: true, description: "Use Enter para começar a segunda linha. A última linha recebe o destaque em itálico automaticamente.", ui: { component: "textarea" } },
           { type: "string", name: "heroIntro", label: "Texto de abertura", required: true, ui: { component: "textarea" } },
           { type: "object", name: "heroSlides", label: "Imagens de destaque da página inicial", description: "Adicione de 1 a 10 imagens. A ordem desta lista será a ordem exibida no carrossel.", list: true, required: true, defaultItem: { imagem: placeholderImage, descricao: draftGalleryImage.alt }, openFormOnCreate: true, ui: { min: 1, max: 10, itemProps: (item) => ({ label: item?.descricao || "Imagem de destaque" }) }, fields: [
-            { type: "image", name: "imagem", label: "Arquivo da imagem", ui: { validate: validateEditedImage("Selecione uma imagem de destaque") } },
-            { type: "string", name: "descricao", label: "Descrição da imagem", description: "Explique brevemente o que aparece na imagem para pessoas que usam leitores de tela.", ui: { validate: validateEditedText("Descreva a imagem com pelo menos 12 caracteres", draftGalleryImage.alt, 12) } },
+            { type: "image", name: "imagem", label: "Arquivo da imagem" },
+            { type: "string", name: "descricao", label: "Descrição da imagem", description: "Explique brevemente o que aparece na imagem para pessoas que usam leitores de tela." },
           ] },
           { type: "string", name: "worksTitle", label: "Título dos trabalhos", required: true },
           { type: "string", name: "worksIntro", label: "Introdução dos trabalhos", required: true, ui: { component: "textarea" } },
@@ -181,8 +174,7 @@ export default defineConfig({
             ...titleAndOrderFields(), ...fixedClassification({ subcategoria: true }), ...commonProjectFields({ includeBody: false }),
             { type: "string", name: "logline", label: "Logline", required: true, ui: { component: "textarea" } },
             { type: "object", name: "blocosRoteiro", label: "Seções do roteiro", list: true, required: true, defaultItem: draftScriptSection, openFormOnCreate: true, ui: { min: 1, itemProps: (item) => ({ label: item?.titulo || "Nova seção" }) }, fields: [
-              { type: "string", name: "titulo", label: "Título da seção", ui: { validate: validateEditedText("Informe o título da seção", draftScriptSection.titulo) } },
-              { type: "string", name: "texto", label: "Texto", ui: { component: "textarea", validate: validateEditedText("Escreva o conteúdo da seção", draftScriptSection.texto) } },
+              { type: "string", name: "titulo", label: "Título da seção" }, { type: "string", name: "texto", label: "Texto", ui: { component: "textarea" } },
             ] },
             { type: "string", name: "trecho", label: "Trecho de exemplo", ui: { component: "textarea" } }, creditsField(), variantField(),
           ] },

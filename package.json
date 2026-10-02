@@ -19,7 +19,7 @@
     "start": "npm run build:assets && tinacms dev -c \"eleventy --serve --pathprefix=/\""
   },
   "dependencies": {
-    "tinacms": "^3.11.0"
+    "tinacms": "3.11.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.2",

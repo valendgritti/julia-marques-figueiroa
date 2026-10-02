@@ -45,19 +45,21 @@ const requiredHttpsUrl = (value) => {
     return "Informe uma URL HTTPS válida";
   }
 };
-const validEmail = (value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || "Informe um e-mail válido";
+// O Tina trata qualquer retorno diferente de undefined como erro, então validações aprovadas não podem retornar true
+const rule = (isValid, message) => (value) => (isValid(value) ? undefined : message);
+const validEmail = rule((value) => !value || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value), "Informe um e-mail válido");
 
 const hiddenField = (name, label, required = true) => ({ type: "string", name, label, required, ui: { component: "hidden" } });
 const titleAndOrderFields = () => [
   { type: "string", name: "titulo", label: "Título do projeto", isTitle: true, required: true },
-  { type: "number", name: "ordem", label: "Posição na página inicial", required: true, ui: { validate: (value) => Number.isInteger(value) && value > 0 || "Use um número inteiro maior que zero" } },
+  { type: "number", name: "ordem", label: "Posição na página inicial", required: true, ui: { validate: rule((value) => Number.isInteger(value) && value > 0, "Use um número inteiro maior que zero") } },
 ];
 const commonProjectFields = ({ includeBody = true } = {}) => [
   { type: "string", name: "eyebrow", label: "Categoria exibida acima do título", required: true },
   { type: "string", name: "resumo", label: "Resumo do projeto", required: true, ui: { component: "textarea" } },
-  { type: "string", name: "descricaoSeo", label: "Descrição para Google e compartilhamentos", required: true, ui: { component: "textarea", validate: (value) => value?.length >= 40 && value.length <= 180 || "Use entre 40 e 180 caracteres" } },
+  { type: "string", name: "descricaoSeo", label: "Descrição para Google e compartilhamentos", required: true, ui: { component: "textarea", validate: rule((value) => value?.length >= 40 && value.length <= 180, "Use entre 40 e 180 caracteres") } },
   { type: "image", name: "capa", label: "Imagem principal do projeto", required: true },
-  { type: "string", name: "capaAlt", label: "Descrição acessível da imagem principal", required: true, ui: { validate: (value) => value?.trim().length >= 12 || "Descreva a imagem com pelo menos 12 caracteres" } },
+  { type: "string", name: "capaAlt", label: "Descrição acessível da imagem principal", required: true, ui: { validate: rule((value) => value?.trim().length >= 12, "Descreva a imagem com pelo menos 12 caracteres") } },
   {
     type: "object",
     name: "fatos",
@@ -126,7 +128,7 @@ export default defineConfig({
         match: { include: "site" },
         ui: { allowedActions: { create: false, delete: false } },
         fields: [
-          { type: "string", name: "seoDescription", label: "Descrição para buscadores", required: true, ui: { component: "textarea", validate: (value) => value?.length >= 50 && value.length <= 160 || "Use entre 50 e 160 caracteres" } },
+          { type: "string", name: "seoDescription", label: "Descrição para buscadores", required: true, ui: { component: "textarea", validate: rule((value) => value?.length >= 50 && value.length <= 160, "Use entre 50 e 160 caracteres") } },
           { type: "string", name: "heroEyebrow", label: "Linha acima do título", required: true },
           { type: "string", name: "heroTitle", label: "Título principal", required: true, description: "Use Enter para começar a segunda linha. A última linha recebe o destaque em itálico automaticamente.", ui: { component: "textarea" } },
           { type: "string", name: "heroIntro", label: "Texto de abertura", required: true, ui: { component: "textarea" } },

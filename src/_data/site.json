@@ -27,6 +27,10 @@
     {
       "imagem": "/imagens/uploads/Capa-(3).png",
       "descricao": "Sun"
+    },
+    {
+      "imagem": "/imagens/uploads/Capa.png",
+      "descricao": "Dancing Queen"
     }
   ],
   "worksTitle": "Trabalhos",

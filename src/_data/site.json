@@ -17,8 +17,8 @@
   "heroIntro": "Entre um take e outro existe uma vida a ser vivida e uma história a ser contada",
   "heroSlides": [
     {
-      "imagem": "/imagens/uploads/1.png",
-      "descricao": "Silhuette"
+      "imagem": "/imagens/uploads/Capa.png",
+      "descricao": "Dancing Queen"
     },
     {
       "imagem": "/imagens/uploads/Post-Feed-Profissa.png",
@@ -29,16 +29,16 @@
       "descricao": "Sun"
     },
     {
-      "imagem": "/imagens/uploads/Capa.png",
-      "descricao": "Dancing Queen"
-    },
-    {
       "imagem": "/imagens/uploads/Capa-(1).png",
       "descricao": "Cinema Elf"
     },
     {
       "imagem": "/imagens/uploads/1.png",
       "descricao": "Silhuette"
+    },
+    {
+      "imagem": "/imagens/uploads/Capa-(3).png",
+      "descricao": "Imagem provisória que deve ser substituída antes da publicação"
     }
   ],
   "worksTitle": "Trabalhos",

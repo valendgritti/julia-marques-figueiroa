@@ -31,6 +31,10 @@
     {
       "imagem": "/imagens/uploads/Capa.png",
       "descricao": "Dancing Queen"
+    },
+    {
+      "imagem": "/imagens/uploads/Capa-(1).png",
+      "descricao": "Cinema Elf"
     }
   ],
   "worksTitle": "Trabalhos",
